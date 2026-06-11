@@ -141,7 +141,7 @@
                         <input type="checkbox" id="auto_renew" style="width: 20px; height: 20px;" onchange="toggleNoticePeriod()">
                         <label for="auto_renew" style="margin: 0; cursor: pointer;">자동갱신 여부</label>
                     </div>
-                    <div class="form-group id="notice-group" class="hidden">
+                    <div class="form-group hidden" id="notice-group">
                         <label>갱신 전 통보 기일 (일 수)</label>
                         <input type="number" id="notice_period" value="0">
                     </div>
@@ -194,22 +194,22 @@
 </div>
 
 <script>
-    // ⚠️ 개인의 Supabase Project URL 및 API Key(Anon Key) 정보 입력
+    // ⚠️ 본인의 Supabase Project URL 및 API Key(Anon Key) 정보 입력
     const SUPABASE_URL = "https://dqdcoisbtqbkytzvyfct.supabase.co";
     const SUPABASE_KEY = "sb_publishable_iAeHQcv6_WxXqQvZ3FLWWg_7xN66R6O";
-// CDN에서 로드된 전역 supabase 객체 안전하게 가져오기
-    const { createClient } = window.supabase;
-    const supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
+    
+    // 글로벌 윈도우 객체에서 안전하게 라이브러리 인스턴스 생성
+    const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
-    // 페이지 로드 시 인증 체킹 연동
-    window.onload = async () => {
-        const { data: { session } } = await supabase.auth.getSession();
+    // 페이지 로드 시 세션 확인
+    window.addEventListener('DOMContentLoaded', async () => {
+        const { data: { session }, error } = await supabase.auth.getSession();
         if (session) {
             showSystem();
         }
-    };
+    });
 
-    // 탭 전환 핸들러
+    // 탭 전환
     function switchTab(type) {
         document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
         document.querySelectorAll('.page-section').forEach(s => s.classList.remove('active'));
@@ -220,14 +220,16 @@
         } else {
             document.querySelectorAll('.tab-btn')[1].classList.add('active');
             document.getElementById('section-list').classList.add('active');
-            loadContracts(); // 목록 이동 시 자동 조회
+            loadContracts();
         }
     }
 
-    // 로그인 프로세스
+    // 로그인
     async function handleLogin() {
         const email = document.getElementById('login-email').value;
         const password = document.getElementById('login-password').value;
+
+        if(!email || !password) return alert("아이디와 비밀번호를 모두 입력해주세요.");
 
         const { data, error } = await supabase.auth.signInWithPassword({ email, password });
 
@@ -258,7 +260,7 @@
         else group.classList.add('hidden');
     }
 
-    // 데이터 저장 프로세스 (스토리지 업로드 -> 메타데이터 DB 저장)
+    // 데이터 저장 (Storage 업로드 -> DB Insert)
     async function saveContract(e) {
         e.preventDefault();
         
@@ -266,7 +268,6 @@
         const file = fileInput.files[0];
         if (!file) return alert("사본 파일을 첨부해 주세요.");
 
-        // 1. 파일 스토리지 업로드 실행
         const fileExt = file.name.split('.').pop();
         const fileName = `${Date.now()}.${fileExt}`;
         const filePath = `contracts/${fileName}`;
@@ -277,10 +278,8 @@
 
         if (storageError) return alert("파일 업로드 오류: " + storageError.message);
 
-        // Public URL 파싱
         const { data: { publicUrl } } = supabase.storage.from('contract-files').getPublicUrl(filePath);
 
-        // 2. 계약서 DB JSON 구조화
         const contractData = {
             doc_dept: document.getElementById('doc_dept').value,
             doc_year: parseInt(document.getElementById('doc_year').value),
@@ -306,24 +305,22 @@
             file_url: publicUrl
         };
 
-        // 3. DB Insert 쿼리 전송
         const { error: dbError } = await supabase.from('contracts').insert([contractData]);
 
         if (dbError) {
-            alert("DB 저장 오류 (부서번호 중복 여부 확인): " + dbError.message);
+            alert("DB 저장 오류 (문서번호 중복 등 확인): " + dbError.message);
         } else {
-            alert("계약서가 시스템에 안전하게 기록되었습니다.");
+            alert("계약서가 성공적으로 등록되었습니다.");
             document.getElementById('contract-form').reset();
             switchTab('list');
         }
     }
 
-    // 데이터 출력 및 통합 검색엔진 로직
+    // 데이터 출력 및 통합 검색
     async function loadContracts() {
         const keyword = document.getElementById('search-keyword').value;
         let query = supabase.from('contracts').select('*');
 
-        // 통합 검색 조건 처리
         if (keyword) {
             query = query.or(`title.ilike.%${keyword}%,party_1.ilike.%${keyword}%,drafter.ilike.%${keyword}%`);
         }
@@ -356,12 +353,6 @@
             tbody.appendChild(tr);
         });
     }
-</script>    
-    
-<script src="https://unpkg.com/@supabase/supabase-js@2"></script>
-<script>
-    // Supabase 스크립트 로드 타이밍 보정용
-    const genSupabase = window.supabase;
 </script>
 </body>
 </html>
