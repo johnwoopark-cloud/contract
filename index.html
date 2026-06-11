@@ -197,8 +197,9 @@
     // ⚠️ 개인의 Supabase Project URL 및 API Key(Anon Key) 정보 입력
     const SUPABASE_URL = "https://dqdcoisbtqbkytzvyfct.supabase.co";
     const SUPABASE_KEY = "sb_publishable_iAeHQcv6_WxXqQvZ3FLWWg_7xN66R6O";
-    
-    const supabase = genSupabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+// CDN에서 로드된 전역 supabase 객체 안전하게 가져오기
+    const { createClient } = window.supabase;
+    const supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
 
     // 페이지 로드 시 인증 체킹 연동
     window.onload = async () => {
@@ -322,7 +323,7 @@
         const keyword = document.getElementById('search-keyword').value;
         let query = supabase.from('contracts').select('*');
 
-        // 통합 검색 조건 처리 (키워드가 존재할 경우 일치하는 행 추적)
+        // 통합 검색 조건 처리
         if (keyword) {
             query = query.or(`title.ilike.%${keyword}%,party_1.ilike.%${keyword}%,drafter.ilike.%${keyword}%`);
         }
@@ -335,9 +336,7 @@
         tbody.innerHTML = "";
 
         data.forEach(item => {
-            // 다자간 상대방 바인딩 정리
             const parties = [item.party_1, item.party_2, item.party_3].filter(Boolean).join(', ');
-            // 금액 원화 표기 가공
             const formattedAmount = new Intl.NumberFormat('ko-KR', { style: 'currency', currency: 'KRW' }).format(item.amount);
             
             const tr = document.createElement('tr');
@@ -357,7 +356,8 @@
             tbody.appendChild(tr);
         });
     }
-</script>
+</script>    
+    
 <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
 <script>
     // Supabase 스크립트 로드 타이밍 보정용
