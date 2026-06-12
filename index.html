@@ -70,7 +70,7 @@
             <form id="contract-form" onsubmit="saveContract(event)">
                 <div class="form-row">
                     <div class="form-group">
-                        <label>문서번호 (3분할)</label>
+                        <label>*문서번호 (3분할)</label>
                         <div class="doc-num-box">
                             <select id="doc_dept" required style="flex: 2;">
                                 <option value="">부서 선택</option>
@@ -92,39 +92,39 @@
                         </div>
                     </div>
                     <div class="form-group">
-                        <label>제목</label>
+                        <label>*제목</label>
                         <input type="text" id="title" required>
                     </div>
                 </div>
 
                 <div class="form-row">
-                    <div class="form-group"><label>기안자</label><input type="text" id="drafter" required></div>
-                    <div class="form-group"><label>검토자</label><input type="text" id="reviewer" required></div>
-                    <div class="form-group"><label>최종결재자</label><input type="text" id="approver" required></div>
+                    <div class="form-group"><label>*기안자</label><input type="text" id="drafter" required></div>
+                    <div class="form-group"><label>*검토자</label><input type="text" id="reviewer" required></div>
+                    <div class="form-group"><label>*최종결재자</label><input type="text" id="approver" required></div>
                 </div>
 
                 <div class="form-row">
-                    <div class="form-group"><label>날인일자</label><input type="date" id="sign_date" required></div>
-                    <div class="form-group"><label>날인번호</label><input type="text" id="sign_num" required></div>
+                    <div class="form-group"><label>*날인일자</label><input type="date" id="sign_date" required></div>
+                    <div class="form-group"><label>*날인번호</label><input type="text" id="sign_num" required></div>
                     <div class="form-group"><label>계약유형</label><input type="text" id="contract_type" required></div>
                 </div>
 
                 <div class="form-row">
-                    <div class="form-group"><label>상대방 1</label><input type="text" id="party_1" required></div>
+                    <div class="form-group"><label>*상대방 1</label><input type="text" id="party_1" required></div>
                     <div class="form-group"><label>상대방 2 (선택)</label><input type="text" id="party_2"></div>
                     <div class="form-group"><label>상대방 3 (선택)</label><input type="text" id="party_3"></div>
                 </div>
 
                 <div class="form-row">
-                    <div class="form-group"><label>계약개시일자</label><input type="date" id="start_date" required></div>
-                    <div class="form-group"><label>계약종료일자</label><input type="date" id="end_date" required></div>
+                    <div class="form-group"><label>*계약개시일자</label><input type="date" id="start_date" required></div>
+                    <div class="form-group"><label>*계약종료일자</label><input type="date" id="end_date" required></div>
                     <div class="form-group"><label>계약금액 (KRW)</label><input type="number" id="amount" required></div>
                 </div>
 
                 <div class="form-row">
                     <div class="form-group" style="display: flex; align-items: center; gap: 10px; margin-top: 30px;">
                         <input type="checkbox" id="auto_renew" style="width: 20px; height: 20px;" onchange="toggleNoticePeriod()">
-                        <label for="auto_renew" style="margin: 0; cursor: pointer;">자동갱신 여부</label>
+                        <label for="auto_renew" style="margin: 0; cursor: pointer;">*자동갱신 여부</label>
                     </div>
                     <div class="form-group hidden" id="notice-group">
                         <label>갱신 전 통보 기일 (일 수)</label>
@@ -133,13 +133,13 @@
                 </div>
 
                 <div class="form-row">
-                    <div class="form-group"><label>원본 날인자</label><input type="text" id="original_signer"></div>
-                    <div class="form-group"><label>원본 보관자</label><input type="text" id="original_keeper"></div>
-                    <div class="form-group"><label>사본 보관자</label><input type="text" id="copy_keeper"></div>
+                    <div class="form-group"><label>*원본 날인자</label><input type="text" id="original_signer"></div>
+                    <div class="form-group"><label>*원본 보관자</label><input type="text" id="original_keeper"></div>
+                    <div class="form-group"><label>*사본 보관자</label><input type="text" id="copy_keeper"></div>
                 </div>
 
                 <div class="form-group" style="background: #0f172a; padding: 20px; border-radius: 6px;">
-                    <label>계약서 사본 파일 첨부 (PDF / 이미지)</label>
+                    <label>*계약서 사본 파일 첨부 (PDF / 이미지)</label>
                     <input type="file" id="contract_file" required>
                 </div>
 
