@@ -59,7 +59,7 @@
 
 <div class="container">
     <div style="text-align: right; margin-bottom: 10px;">
-        <button id="btn-logout" class="hidden" style="background: none; border: none; color: #ef4444; cursor: pointer;">[로그아웃]</button>
+        <button id="btn-logout" class="hidden" onclick="handleLogoutClick()" style="background: none; border: none; color: #ef4444; cursor: pointer;">[로그아웃]</button>
     </div>
 
     <div id="login-section" style="max-width: 400px; margin: 100px auto; background: var(--panel-bg); padding: 40px; border-radius: 12px; text-align: center;">
@@ -275,26 +275,22 @@
 </div>
 
 <script>
-    // Supabase 초기화 및 전역 변수 선언
     const SUPABASE_URL = "https://dqdcoisbtqbkytzvyfct.supabase.co";
     const SUPABASE_KEY = "sb_publishable_iAeHQcv6_WxXqQvZ3FLWWg_7xN66R6O";
     const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
-    // 날짜 포맷팅 유틸리티
     function formatDate(dateStr) {
         if(!dateStr) return "";
         const d = new Date(dateStr);
         return `${d.getFullYear()}.${d.getMonth()+1}.${d.getDate()}.`;
     }
 
-    // 시스템 UI 토글 제어
     function showSystem() {
         document.getElementById('login-section').classList.add('hidden');
         document.getElementById('main-system').classList.remove('hidden');
         document.getElementById('btn-logout').classList.remove('hidden');
     }
 
-    // 탭 스위칭 함수
     function switchTab(type) {
         document.querySelectorAll('.tab-btn, .page-section').forEach(el => el.classList.remove('active'));
         if(type === 'input') {
@@ -307,7 +303,7 @@
         }
     }
 
-    // 로그인 실행 함수 (핸들러 전역 배치 완료)
+    // 로그인 실행 함수
     async function handleLogin() {
         const email = document.getElementById('login-email').value;
         const password = document.getElementById('login-password').value;
@@ -322,24 +318,22 @@
         }
     }
 
-    // 로그아웃 바인딩
-    document.getElementById('btn-logout').onclick = async () => {
-        await supabase.signOut();
+    // 로그아웃 트리거 함수화 (Uncaught ReferenceError 방지)
+    async function handleLogoutClick() {
+        await supabase.auth.signOut();
         location.reload();
-    };
+    }
 
-    // DOM 로드 완료 후 기초 초기화 작업
+    // DOM 구조 형성 직후 동작 처리
     window.addEventListener('DOMContentLoaded', async () => {
         const today = new Date().toISOString().split('T')[0];
         if(document.getElementById('draft_date')) document.getElementById('draft_date').value = today;
         if(document.getElementById('p-create-date')) document.getElementById('p-create-date').innerText = formatDate(today);
 
-        // 현재 클라이언트 브라우저에 남은 기존 세션 체크
         const { data: { session } } = await supabase.auth.getSession();
         if (session) { showSystem(); }
     });
 
-    // 데이터 저장 비즈니스 로직
     async function saveContract(e) {
         e.preventDefault();
         
@@ -352,7 +346,6 @@
 
         const { data: { publicUrl } } = supabase.storage.from('contract-files').getPublicUrl(filePath);
 
-        // 스키마 컬럼 호환 매핑 구조체 생성
         const data = {
             doc_dept: document.getElementById('doc_dept').value,
             doc_year: parseInt(document.getElementById('doc_year').value) || 2026,
@@ -364,69 +357,3 @@
             sign_date: document.getElementById('sign_date').value,
             sign_num: document.getElementById('sign_num').value,
             party_1: document.getElementById('parties').value,
-            start_date: document.getElementById('start_date').value,
-            end_date: document.getElementById('end_date').value,
-            auto_renew: document.getElementById('auto_renew').value === 'Y',
-            file_url: publicUrl
-        };
-
-        const { error: dbError } = await supabase.from('contracts').insert([data]);
-        if (dbError) {
-            alert("데이터베이스 저장 실패: " + dbError.message);
-        } else {
-            alert("성공적으로 저장되었습니다!\n아래 [양식 인쇄] 버튼을 사용해 문서를 출력하세요.");
-            
-            // 인쇄용 양식 뷰 테두리 데이터 삽입 동적 바인딩
-            document.getElementById('p-doc-dept').innerText = data.doc_dept;
-            document.getElementById('p-doc-num-full').innerText = `${data.doc_year}-${data.doc_num}`;
-            document.getElementById('p-draft-date').innerText = formatDate(document.getElementById('draft_date').value);
-            document.getElementById('p-drafter-dept').innerText = document.getElementById('drafter_dept').value;
-            document.getElementById('p-drafter-name').innerText = data.drafter;
-            document.getElementById('p-reviewer-dept').innerText = document.getElementById('reviewer_dept').value;
-            document.getElementById('p-reviewer-name').innerText = data.reviewer;
-            document.getElementById('p-approver').innerText = data.approver;
-            document.getElementById('p-title').innerText = data.title;
-            document.getElementById('p-parties').innerText = data.party_1;
-            document.getElementById('p-start-date').innerText = formatDate(data.start_date);
-            document.getElementById('p-end-date').innerText = formatDate(data.end_date);
-            document.getElementById('p-end-condition').innerText = document.getElementById('end_condition').value || "-";
-            document.getElementById('p-auto-y').checked = data.auto_renew;
-            document.getElementById('p-auto-n').checked = !data.auto_renew;
-            document.getElementById('p-renew-notice').innerText = document.getElementById('renew_notice').value || "-";
-            document.getElementById('p-signer-dept').innerText = document.getElementById('signer_dept').value;
-            document.getElementById('p-signer-name').innerText = document.getElementById('signer_name').value;
-            document.getElementById('p-sign-date').innerText = formatDate(data.sign_date);
-            document.getElementById('p-sign-num').innerText = data.sign_num;
-            document.getElementById('p-keeper-dept').innerText = document.getElementById('keeper_dept').value;
-            document.getElementById('p-keeper-name').innerText = document.getElementById('keeper_name').value;
-            document.getElementById('p-f-drafter-dept').innerText = document.getElementById('file_drafter_dept').value;
-            document.getElementById('p-f-drafter-name').innerText = document.getElementById('file_drafter_name').value;
-            document.getElementById('p-f-keeper-dept').innerText = document.getElementById('file_keeper_dept').value;
-            document.getElementById('p-f-keeper-name').innerText = document.getElementById('file_keeper_name').value;
-            document.getElementById('p-manager-dept').innerText = document.getElementById('manager_dept').value;
-            document.getElementById('p-manager-name').innerText = document.getElementById('manager_name').value;
-
-            // 인쇄를 유도할 수 있도록 제어용 히든 클래스 해제
-            document.getElementById('btn-print-receipt').classList.remove('hidden');
-            document.getElementById('print-receipt-zone').classList.remove('hidden');
-        }
-    }
-
-    // 서버 사이드 조회
-    async function loadContracts() {
-        const kw = document.getElementById('search-keyword').value;
-        let query = supabase.from('contracts').select('*').order('created_at', {ascending:false});
-        if(kw) query = query.ilike('title', `%${kw}%`);
-        const { data, error } = await query;
-        if(error) return;
-        
-        let html = '<table style="width:100%; border-collapse:collapse; margin-top:20px; color:white;"><tr><th style="border:1px solid #334155; padding:10px;">문서번호</th><th style="border:1px solid #334155;">제목</th><th style="border:1px solid #334155;">파일</th></tr>';
-        data.forEach(item => {
-            html += `<tr><td style="border:1px solid #334155; padding:10px; text-align:center;">${item.doc_dept}-${item.doc_year}-${item.doc_num}</td><td style="border:1px solid #334155; padding:10px;">${item.title}</td><td style="border:1px solid #334155; text-align:center;"><a href="${item.file_url}" target="_blank" style="color:#38bdf8;">보기</a></td></tr>`;
-        });
-        html += '</table>';
-        document.getElementById('contract-list-target').innerHTML = html;
-    }
-</script>
-</body>
-</html>
