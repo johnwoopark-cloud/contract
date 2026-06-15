@@ -32,7 +32,7 @@
         .doc-num-box { display: flex; gap: 10px; align-items: center; }
         
         button.btn-primary { background: var(--accent-color); color: #0f172a; font-weight: bold; padding: 12px 24px; border: none; border-radius: 6px; cursor: pointer; width: 100%; font-size: 16px; }
-        button.btn-secondary { background: #475569; color: white; font-weight: bold; padding: 12px 24px; border: none; border-radius: 6px; cursor: pointer; font-size: 16px; }
+        button.btn-secondary { background: #10b981; color: white; font-weight: bold; padding: 12px 24px; border: none; border-radius: 6px; cursor: pointer; width: 100%; font-size: 16px; }
         
         .search-bar { display: flex; gap: 15px; margin-bottom: 20px; }
         .table-wrapper { overflow-x: auto; margin-top: 20px; }
@@ -42,19 +42,19 @@
         
         .hidden { display: none !important; }
 
-        /* ================= 프린트 아웃 전용 CSS 스타일 ================= */
+        /* 등록 완료 후 화면 확인 및 인쇄를 위한 전용 양식 스타일 */
+        #print-receipt-zone { display: none; background: white; color: black; padding: 30px; border: 2px solid #000; max-width: 800px; margin: 20px auto; border-radius: 8px; }
+        #print-receipt-zone h1 { text-align: center; margin-bottom: 30px; font-size: 24px; text-decoration: underline; color: #000; }
+        .receipt-table { width: 100%; border-collapse: collapse; margin-bottom: 20px; }
+        .receipt-table th, .receipt-table td { border: 1px solid #000 !important; padding: 10px !important; color: black !important; background: none !important; }
+        .receipt-table th { width: 25%; background-color: #f1f5f9 !important; font-weight: bold; text-align: center; }
+
+        /* ================= 프린트 아웃 시에만 작동하는 CSS 스타일 ================= */
         @media print {
-            body { background: white !important; color: black !important; padding: 0; }
-            .nav-tabs, .search-bar, #btn-logout, .btn-primary, .btn-secondary, th:last-child, td:last-child { 
-                display: none !important; /* 네비게이션, 검색창, 로그아웃, 파일보기 컬럼 숨김 */
-            }
-            .page-section { background: white !important; border: none !important; padding: 0 !important; }
-            #section-list { display: block !important; } /* 리스트 섹션은 강제 출력 */
-            table { width: 100% !important; border: 1px solid #000 !important; font-size: 11px; }
-            th, td { border: 1px solid #cbd5e1 !important; color: black !important; padding: 6px !important; }
-            th { background: #f1f5f9 !important; color: black !important; }
-            span { background: none !important; padding: 0 !important; color: black !important; }
-            @page { size: A4 landscape; margin: 10mm; } /* A4 가로 방향 출력 최적화 */
+            body * { visibility: hidden; } /* 브라우저의 전반적인 요소를 모두 숨김 */
+            #print-receipt-zone, #print-receipt-zone * { visibility: visible; } /* 인쇄 전용 존만 인쇄 대상화 */
+            #print-receipt-zone { display: block !important; position: absolute; left: 0; top: 0; width: 100%; border: none; }
+            @page { size: A4 portrait; margin: 20mm; } /* 세로 모드로 출력 최적화 */
         }
     </style>
 </head>
@@ -159,19 +159,67 @@
                     <input type="file" id="contract_file" required>
                 </div>
 
-                <button type="submit" class="btn-primary" style="margin-top: 20px;">계약서 정보 시스템 등록</button>
+                <div style="display: flex; gap: 15px; margin-top: 20px;">
+                    <button type="submit" class="btn-primary" id="btn-save">계약서 정보 시스템 등록 (저장)</button>
+                    <button type="button" class="btn-secondary hidden" id="btn-print-receipt" onclick="printCurrentContract()">🖨️ 등록 내용 인쇄</button>
+                </div>
             </form>
+            
+            <div id="print-receipt-zone" class="hidden">
+                <h1>계약서 등록 확인서</h1>
+                <table class="receipt-table">
+                    <tr>
+                        <th>문서번호</th>
+                        <td id="p-doc-num"></td>
+                    </tr>
+                    <tr>
+                        <th>제 목</th>
+                        <td id="p-title"></td>
+                    </tr>
+                    <tr>
+                        <th>계약유형</th>
+                        <td id="p-type"></td>
+                    </tr>
+                    <tr>
+                        <th>상대방</th>
+                        <td id="p-parties"></td>
+                    </tr>
+                    <tr>
+                        <th>계약기간</th>
+                        <td id="p-period"></td>
+                    </tr>
+                    <tr>
+                        <th>계약금액</th>
+                        <td id="p-amount"></td>
+                    </tr>
+                    <tr>
+                        <th>기안/검토/결재</th>
+                        <td id="p-users"></td>
+                    </tr>
+                    <tr>
+                        <th>날인 정보</th>
+                        <td id="p-sign"></td>
+                    </tr>
+                    <tr>
+                        <th>갱신조건</th>
+                        <td id="p-renew"></td>
+                    </tr>
+                    <tr>
+                        <th>보관(원/사)</th>
+                        <td id="p-keeper"></td>
+                    </tr>
+                </table>
+            </div>
         </div>
 
         <div id="section-list" class="page-section">
             <div class="search-bar">
-                <input type="text" id="search-keyword" placeholder="제목, 상대방, 기안자 통합 키워드 검색..." style="flex: 3;">
-                <button class="btn-primary" style="flex: 0.8;" onclick="loadContracts()">검색</button>
-                <button class="btn-secondary" style="flex: 0.8; background-color: #10b981;" onclick="printTable()">🖨️ 프린트 출력</button>
+                <input type="text" id="search-keyword" placeholder="제목, 상대방, 기안자 통합 키워드 검색..." style="flex: 4;">
+                <button class="btn-primary" style="flex: 1;" onclick="loadContracts()">검색</button>
             </div>
 
             <div class="table-wrapper">
-                <table id="print-target">
+                <table>
                     <thead>
                         <tr>
                             <th>문서번호</th>
@@ -199,6 +247,7 @@
     const SUPABASE_PUBLISHABLE_KEY = "sb_publishable_iAeHQcv6_WxXqQvZ3FLWWg_7xN66R6O";
     
     const supabaseClient = window.supabase.createClient(SUPABASE_PROJECT_URL, SUPABASE_PUBLISHABLE_KEY);
+    let lastSavedContract = null; // 인쇄 트래킹용 글로벌 변수
 
     window.addEventListener('DOMContentLoaded', async () => {
         const { data: { session } } = await supabaseClient.auth.getSession();
@@ -300,10 +349,33 @@
         if (dbError) {
             alert("DB 저장 오류: " + dbError.message);
         } else {
-            alert("계약서가 성공적으로 등록되었습니다.");
-            document.getElementById('contract-form').reset();
-            switchTab('list');
+            alert("계약서가 성공적으로 등록되었습니다.\n등록된 내용을 인쇄하려면 아래 생성된 [등록 내용 인쇄] 버튼을 눌러주세요.");
+            
+            // 전역 인쇄 변수에 매핑 및 인쇄 테이블 동적 바인딩
+            lastSavedContract = contractData;
+            document.getElementById('p-doc-num').innerText = `${contractData.doc_dept}-${contractData.doc_year}-${contractData.doc_num}`;
+            document.getElementById('p-title').innerText = contractData.title;
+            document.getElementById('p-type').innerText = contractData.contract_type || '-';
+            document.getElementById('p-parties').innerText = [contractData.party_1, contractData.party_2, contractData.party_3].filter(Boolean).join(', ');
+            document.getElementById('p-period').innerText = `${contractData.start_date} ~ ${contractData.end_date}`;
+            document.getElementById('p-amount').innerText = new Intl.NumberFormat('ko-KR', { style: 'currency', currency: 'KRW' }).format(contractData.amount);
+            document.getElementById('p-users').innerText = `${contractData.drafter} / ${contractData.reviewer} / ${contractData.approver}`;
+            document.getElementById('p-sign').innerText = `${contractData.sign_date} (${contractData.sign_num})`;
+            document.getElementById('p-renew').innerText = contractData.auto_renew ? `자동갱신 (${contractData.notice_period}일전 통보)` : '단발성';
+            document.getElementById('p-keeper').innerText = `원본: ${contractData.original_keeper || '-'} / 사본: ${contractData.copy_keeper || '-'}`;
+            
+            // 인쇄 확인 버튼 및 확인 구역 노출 활성화
+            document.getElementById('btn-print-receipt').classList.remove('hidden');
+            document.getElementById('print-receipt-zone').classList.remove('hidden');
         }
+    }
+
+    // 인쇄 실행 함수
+    function printCurrentContract() {
+        if (!lastSavedContract) {
+            return alert("출력할 저장 완료 데이터가 기록되지 않았습니다.");
+        }
+        window.print();
     }
 
     async function loadContracts() {
@@ -340,11 +412,6 @@
             `;
             tbody.appendChild(tr);
         });
-    }
-
-    // 프린트 기능 수행 함수
-    function printTable() {
-        window.print();
     }
 </script>
 </body>
