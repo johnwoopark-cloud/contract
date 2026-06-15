@@ -54,6 +54,68 @@
             @page { size: A4 portrait; margin: 15mm; }
         }
     </style>
+
+    <script>
+        // 에러를 차단하기 위해 스크립트 엔진 최상단(Head)에 핵심 구동 함수 선언 전면 배치
+        const SUPABASE_URL = "https://dqdcoisbtqbkytzvyfct.supabase.co";
+        const SUPABASE_KEY = "sb_publishable_iAeHQcv6_WxXqQvZ3FLWWg_7xN66R6O";
+        let supabase;
+
+        // 초기화 수행
+        try {
+            supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+        } catch(e) {
+            console.error("Supabase 로드 오류:", e);
+        }
+
+        function formatDate(dateStr) {
+            if(!dateStr) return "";
+            const d = new Date(dateStr);
+            return `${d.getFullYear()}.${d.getMonth()+1}.${d.getDate()}.`;
+        }
+
+        function showSystem() {
+            document.getElementById('login-section').classList.add('hidden');
+            document.getElementById('main-system').classList.remove('hidden');
+            document.getElementById('btn-logout').classList.remove('hidden');
+        }
+
+        // 로그인 실행 핵심 함수 (인라인 바인딩 대응 보장)
+        async function handleLogin() {
+            const email = document.getElementById('login-email').value;
+            const password = document.getElementById('login-password').value;
+            
+            if(!email || !password) return alert("아이디와 비밀번호를 입력해주세요.");
+
+            try {
+                const { data, error } = await supabase.auth.signInWithPassword({ email, password });
+                if (error) {
+                    alert("로그인 실패: " + error.message);
+                } else {
+                    showSystem();
+                }
+            } catch(e) {
+                alert("인증 통신 오류 발생");
+            }
+        }
+
+        async function handleLogoutClick() {
+            await supabase.auth.signOut();
+            location.reload();
+        }
+
+        function switchTab(type) {
+            document.querySelectorAll('.tab-btn, .page-section').forEach(el => el.classList.remove('active'));
+            if(type === 'input') {
+                document.querySelector('.tab-btn:nth-child(1)').classList.add('active');
+                document.getElementById('section-input').classList.add('active');
+            } else {
+                document.querySelector('.tab-btn:nth-child(2)').classList.add('active');
+                document.getElementById('section-list').classList.add('active');
+                loadContracts();
+            }
+        }
+    </script>
 </head>
 <body>
 
@@ -275,63 +337,16 @@
 </div>
 
 <script>
-    const SUPABASE_URL = "https://dqdcoisbtqbkytzvyfct.supabase.co";
-    const SUPABASE_KEY = "sb_publishable_iAeHQcv6_WxXqQvZ3FLWWg_7xN66R6O";
-    const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
-
-    function formatDate(dateStr) {
-        if(!dateStr) return "";
-        const d = new Date(dateStr);
-        return `${d.getFullYear()}.${d.getMonth()+1}.${d.getDate()}.`;
-    }
-
-    function showSystem() {
-        document.getElementById('login-section').classList.add('hidden');
-        document.getElementById('main-system').classList.remove('hidden');
-        document.getElementById('btn-logout').classList.remove('hidden');
-    }
-
-    function switchTab(type) {
-        document.querySelectorAll('.tab-btn, .page-section').forEach(el => el.classList.remove('active'));
-        if(type === 'input') {
-            document.querySelector('.tab-btn:nth-child(1)').classList.add('active');
-            document.getElementById('section-input').classList.add('active');
-        } else {
-            document.querySelector('.tab-btn:nth-child(2)').classList.add('active');
-            document.getElementById('section-list').classList.add('active');
-            loadContracts();
-        }
-    }
-
-    // 로그인 실행 함수
-    async function handleLogin() {
-        const email = document.getElementById('login-email').value;
-        const password = document.getElementById('login-password').value;
-        
-        if(!email || !password) return alert("아이디와 비밀번호를 입력해주세요.");
-
-        const { data, error } = await supabase.auth.signInWithPassword({ email, password });
-        if (error) {
-            alert("로그인 실패: " + error.message);
-        } else {
-            showSystem();
-        }
-    }
-
-    // 로그아웃 트리거 함수화 (Uncaught ReferenceError 방지)
-    async function handleLogoutClick() {
-        await supabase.auth.signOut();
-        location.reload();
-    }
-
-    // DOM 구조 형성 직후 동작 처리
+    // DOM 로드 후 후행 처리되어야 하는 DB 처리 로직은 하단 스크립트에 잔존 배치
     window.addEventListener('DOMContentLoaded', async () => {
         const today = new Date().toISOString().split('T')[0];
         if(document.getElementById('draft_date')) document.getElementById('draft_date').value = today;
         if(document.getElementById('p-create-date')) document.getElementById('p-create-date').innerText = formatDate(today);
 
-        const { data: { session } } = await supabase.auth.getSession();
-        if (session) { showSystem(); }
+        if(supabase) {
+            const { data: { session } } = await supabase.auth.getSession();
+            if (session) { showSystem(); }
+        }
     });
 
     async function saveContract(e) {
@@ -357,3 +372,17 @@
             sign_date: document.getElementById('sign_date').value,
             sign_num: document.getElementById('sign_num').value,
             party_1: document.getElementById('parties').value,
+            start_date: document.getElementById('start_date').value,
+            end_date: document.getElementById('end_date').value,
+            auto_renew: document.getElementById('auto_renew').value === 'Y',
+            file_url: publicUrl
+        };
+
+        const { error: dbError } = await supabase.from('contracts').insert([data]);
+        if (dbError) {
+            alert("데이터베이스 저장 실패: " + dbError.message);
+        } else {
+            alert("성공적으로 저장되었습니다!\n아래 [양식 인쇄] 버튼을 사용해 문서를 출력하세요.");
+            
+            document.getElementById('p-doc-dept').innerText = data.doc_dept;
+            document.getElementById('p-doc-num-full').innerText = `${data.doc_year}-${data
