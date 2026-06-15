@@ -58,10 +58,18 @@
 <body>
 
 <div class="container">
+    <div style="text-align: right; margin-bottom: 10px;">
+        <button id="btn-logout" class="hidden" style="background: none; border: none; color: #ef4444; cursor: pointer;">[로그아웃]</button>
+    </div>
+
     <div id="login-section" style="max-width: 400px; margin: 100px auto; background: var(--panel-bg); padding: 40px; border-radius: 12px; text-align: center;">
-        <h2 style="margin-bottom: 20px;">시스템 로그인</h2>
-        <input type="email" id="login-email" placeholder="이메일" style="margin-bottom:10px;">
-        <input type="password" id="login-password" placeholder="비밀번호" style="margin-bottom:20px;">
+        <h2 style="margin-bottom: 20px;">계약서 시스템 로그인</h2>
+        <div class="form-group">
+            <input type="email" id="login-email" placeholder="아이디(이메일)" required>
+        </div>
+        <div class="form-group">
+            <input type="password" id="login-password" placeholder="비밀번호" required>
+        </div>
         <button class="btn-primary" onclick="handleLogin()">인증 및 접속</button>
     </div>
 
@@ -169,9 +177,9 @@
                         <th class="req-mark">기안문</th>
                         <td colspan="2">
                             <div class="flex-td">
-                                <span id="p-doc-dept">미디어전</span>
-                                <span id="p-doc-num-full">2026-0001</span>
-                                <span id="p-draft-date">2026.1.2.</span>
+                                <span id="p-doc-dept"></span>
+                                <span id="p-doc-num-full"></span>
+                                <span id="p-draft-date"></span>
                             </div>
                         </td>
                     </tr>
@@ -267,38 +275,29 @@
 </div>
 
 <script>
+    // Supabase 초기화 및 전역 변수 선언
     const SUPABASE_URL = "https://dqdcoisbtqbkytzvyfct.supabase.co";
     const SUPABASE_KEY = "sb_publishable_iAeHQcv6_WxXqQvZ3FLWWg_7xN66R6O";
     const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
-    // 날짜 포맷 함수 (2026.1.2. 형태)
+    // 날짜 포맷팅 유틸리티
     function formatDate(dateStr) {
         if(!dateStr) return "";
         const d = new Date(dateStr);
         return `${d.getFullYear()}.${d.getMonth()+1}.${d.getDate()}.`;
     }
 
-    // 오늘 날짜 자동 설정
-    window.onload = () => {
-        const today = new Date().toISOString().split('T')[0];
-        document.getElementById('draft_date').value = today;
-        document.getElementById('p-create-date').innerText = formatDate(today);
-    };
-
-    async function handleLogin() {
-        const email = document.getElementById('login-email').value;
-        const password = document.getElementById('login-password').value;
-        const { error } = await supabase.auth.signInWithPassword({ email, password });
-        if (error) alert("로그인 실패");
-        else {
-            document.getElementById('login-section').classList.add('hidden');
-            document.getElementById('main-system').classList.remove('hidden');
-        }
+    // 시스템 UI 토글 제어
+    function showSystem() {
+        document.getElementById('login-section').classList.add('hidden');
+        document.getElementById('main-system').classList.remove('hidden');
+        document.getElementById('btn-logout').classList.remove('hidden');
     }
 
+    // 탭 스위칭 함수
     function switchTab(type) {
         document.querySelectorAll('.tab-btn, .page-section').forEach(el => el.classList.remove('active'));
-        if(type==='input') {
+        if(type === 'input') {
             document.querySelector('.tab-btn:nth-child(1)').classList.add('active');
             document.getElementById('section-input').classList.add('active');
         } else {
@@ -308,102 +307,126 @@
         }
     }
 
+    // 로그인 실행 함수 (핸들러 전역 배치 완료)
+    async function handleLogin() {
+        const email = document.getElementById('login-email').value;
+        const password = document.getElementById('login-password').value;
+        
+        if(!email || !password) return alert("아이디와 비밀번호를 입력해주세요.");
+
+        const { data, error } = await supabase.auth.signInWithPassword({ email, password });
+        if (error) {
+            alert("로그인 실패: " + error.message);
+        } else {
+            showSystem();
+        }
+    }
+
+    // 로그아웃 바인딩
+    document.getElementById('btn-logout').onclick = async () => {
+        await supabase.signOut();
+        location.reload();
+    };
+
+    // DOM 로드 완료 후 기초 초기화 작업
+    window.addEventListener('DOMContentLoaded', async () => {
+        const today = new Date().toISOString().split('T')[0];
+        if(document.getElementById('draft_date')) document.getElementById('draft_date').value = today;
+        if(document.getElementById('p-create-date')) document.getElementById('p-create-date').innerText = formatDate(today);
+
+        // 현재 클라이언트 브라우저에 남은 기존 세션 체크
+        const { data: { session } } = await supabase.auth.getSession();
+        if (session) { showSystem(); }
+    });
+
+    // 데이터 저장 비즈니스 로직
     async function saveContract(e) {
         e.preventDefault();
         
-        // 1. 데이터 수집 및 인쇄 레이아웃 매핑
+        const file = document.getElementById('contract_file').files[0];
+        if(!file) return alert("파일을 선택해 주세요.");
+
+        const filePath = `contracts/${Date.now()}_${file.name}`;
+        const { error: storageError } = await supabase.storage.from('contract-files').upload(filePath, file);
+        if(storageError) return alert("파일 서버 업로드 실패: " + storageError.message);
+
+        const { data: { publicUrl } } = supabase.storage.from('contract-files').getPublicUrl(filePath);
+
+        // 스키마 컬럼 호환 매핑 구조체 생성
         const data = {
             doc_dept: document.getElementById('doc_dept').value,
-            doc_full: `${document.getElementById('doc_year').value}-${document.getElementById('doc_num').value}`,
-            draft_date: document.getElementById('draft_date').value,
-            drafter_dept: document.getElementById('drafter_dept').value,
-            drafter_name: document.getElementById('drafter_name').value,
-            reviewer_dept: document.getElementById('reviewer_dept').value,
-            reviewer_name: document.getElementById('reviewer_name').value,
-            approver: document.getElementById('approver').value,
+            doc_year: parseInt(document.getElementById('doc_year').value) || 2026,
+            doc_num: parseInt(document.getElementById('doc_num').value) || 0,
             title: document.getElementById('title').value,
-            parties: document.getElementById('parties').value,
-            start_date: document.getElementById('start_date').value,
-            end_date: document.getElementById('end_date').value,
-            end_condition: document.getElementById('end_condition').value,
-            auto_renew: document.getElementById('auto_renew').value,
-            renew_notice: document.getElementById('renew_notice').value,
-            signer_dept: document.getElementById('signer_dept').value,
-            signer_name: document.getElementById('signer_name').value,
+            drafter: document.getElementById('drafter_name').value, 
+            reviewer: document.getElementById('reviewer_name').value,
+            approver: document.getElementById('approver').value,
             sign_date: document.getElementById('sign_date').value,
             sign_num: document.getElementById('sign_num').value,
-            keeper_dept: document.getElementById('keeper_dept').value,
-            keeper_name: document.getElementById('keeper_name').value,
-            file_drafter_dept: document.getElementById('file_drafter_dept').value,
-            file_drafter_name: document.getElementById('file_drafter_name').value,
-            file_keeper_dept: document.getElementById('file_keeper_dept').value,
-            file_keeper_name: document.getElementById('file_keeper_name').value,
-            manager_dept: document.getElementById('manager_dept').value,
-            manager_name: document.getElementById('manager_name').value,
-            create_date: new Date().toISOString().split('T')[0]
+            party_1: document.getElementById('parties').value,
+            start_date: document.getElementById('start_date').value,
+            end_date: document.getElementById('end_date').value,
+            auto_renew: document.getElementById('auto_renew').value === 'Y',
+            file_url: publicUrl
         };
 
-        // 2. 인쇄 화면에 값 채우기
-        document.getElementById('p-doc-dept').innerText = data.doc_dept;
-        document.getElementById('p-doc-num-full').innerText = data.doc_full;
-        document.getElementById('p-draft-date').innerText = formatDate(data.draft_date);
-        document.getElementById('p-drafter-dept').innerText = data.drafter_dept;
-        document.getElementById('p-drafter-name').innerText = data.drafter_name;
-        document.getElementById('p-reviewer-dept').innerText = data.reviewer_dept;
-        document.getElementById('p-reviewer-name').innerText = data.reviewer_name;
-        document.getElementById('p-approver').innerText = data.approver;
-        document.getElementById('p-title').innerText = data.title;
-        document.getElementById('p-parties').innerText = data.parties;
-        document.getElementById('p-start-date').innerText = formatDate(data.start_date);
-        document.getElementById('p-end-date').innerText = formatDate(data.end_date);
-        document.getElementById('p-end-condition').innerText = data.end_condition;
-        document.getElementById('p-auto-y').checked = data.auto_renew === 'Y';
-        document.getElementById('p-auto-n').checked = data.auto_renew === 'N';
-        document.getElementById('p-renew-notice').innerText = data.renew_notice;
-        document.getElementById('p-signer-dept').innerText = data.signer_dept;
-        document.getElementById('p-signer-name').innerText = data.signer_name;
-        document.getElementById('p-sign-date').innerText = formatDate(data.sign_date);
-        document.getElementById('p-sign-num').innerText = data.sign_num;
-        document.getElementById('p-keeper-dept').innerText = data.keeper_dept;
-        document.getElementById('p-keeper-name').innerText = data.keeper_name;
-        document.getElementById('p-f-drafter-dept').innerText = data.file_drafter_dept;
-        document.getElementById('p-f-drafter-name').innerText = data.file_drafter_name;
-        document.getElementById('p-f-keeper-dept').innerText = data.file_keeper_dept;
-        document.getElementById('p-f-keeper-name').innerText = data.file_keeper_name;
-        document.getElementById('p-manager-dept').innerText = data.manager_dept;
-        document.getElementById('p-manager-name').innerText = data.manager_name;
+        const { error: dbError } = await supabase.from('contracts').insert([data]);
+        if (dbError) {
+            alert("데이터베이스 저장 실패: " + dbError.message);
+        } else {
+            alert("성공적으로 저장되었습니다!\n아래 [양식 인쇄] 버튼을 사용해 문서를 출력하세요.");
+            
+            // 인쇄용 양식 뷰 테두리 데이터 삽입 동적 바인딩
+            document.getElementById('p-doc-dept').innerText = data.doc_dept;
+            document.getElementById('p-doc-num-full').innerText = `${data.doc_year}-${data.doc_num}`;
+            document.getElementById('p-draft-date').innerText = formatDate(document.getElementById('draft_date').value);
+            document.getElementById('p-drafter-dept').innerText = document.getElementById('drafter_dept').value;
+            document.getElementById('p-drafter-name').innerText = data.drafter;
+            document.getElementById('p-reviewer-dept').innerText = document.getElementById('reviewer_dept').value;
+            document.getElementById('p-reviewer-name').innerText = data.reviewer;
+            document.getElementById('p-approver').innerText = data.approver;
+            document.getElementById('p-title').innerText = data.title;
+            document.getElementById('p-parties').innerText = data.party_1;
+            document.getElementById('p-start-date').innerText = formatDate(data.start_date);
+            document.getElementById('p-end-date').innerText = formatDate(data.end_date);
+            document.getElementById('p-end-condition').innerText = document.getElementById('end_condition').value || "-";
+            document.getElementById('p-auto-y').checked = data.auto_renew;
+            document.getElementById('p-auto-n').checked = !data.auto_renew;
+            document.getElementById('p-renew-notice').innerText = document.getElementById('renew_notice').value || "-";
+            document.getElementById('p-signer-dept').innerText = document.getElementById('signer_dept').value;
+            document.getElementById('p-signer-name').innerText = document.getElementById('signer_name').value;
+            document.getElementById('p-sign-date').innerText = formatDate(data.sign_date);
+            document.getElementById('p-sign-num').innerText = data.sign_num;
+            document.getElementById('p-keeper-dept').innerText = document.getElementById('keeper_dept').value;
+            document.getElementById('p-keeper-name').innerText = document.getElementById('keeper_name').value;
+            document.getElementById('p-f-drafter-dept').innerText = document.getElementById('file_drafter_dept').value;
+            document.getElementById('p-f-drafter-name').innerText = document.getElementById('file_drafter_name').value;
+            document.getElementById('p-f-keeper-dept').innerText = document.getElementById('file_keeper_dept').value;
+            document.getElementById('p-f-keeper-name').innerText = document.getElementById('file_keeper_name').value;
+            document.getElementById('p-manager-dept').innerText = document.getElementById('manager_dept').value;
+            document.getElementById('p-manager-name').innerText = document.getElementById('manager_name').value;
 
-        // 3. 파일 업로드 로직 (기존 유지)
-        const file = document.getElementById('contract_file').files[0];
-        const filePath = `contracts/${Date.now()}_${file.name}`;
-        await supabase.storage.from('contract-files').upload(filePath, file);
-        const { data: { publicUrl } } = supabase.storage.from('contract-files').getPublicUrl(filePath);
-        data.file_url = publicUrl;
-
-        // 4. DB 저장
-        const { error } = await supabase.from('contracts').insert([data]);
-        if (error) alert("저장 실패: " + error.message);
-        else {
-            alert("저장 완료! 인쇄 버튼을 눌러주세요.");
+            // 인쇄를 유도할 수 있도록 제어용 히든 클래스 해제
             document.getElementById('btn-print-receipt').classList.remove('hidden');
             document.getElementById('print-receipt-zone').classList.remove('hidden');
         }
     }
 
+    // 서버 사이드 조회
     async function loadContracts() {
         const kw = document.getElementById('search-keyword').value;
         let query = supabase.from('contracts').select('*').order('created_at', {ascending:false});
         if(kw) query = query.ilike('title', `%${kw}%`);
-        const { data } = await query;
+        const { data, error } = await query;
+        if(error) return;
         
-        let html = '<table style="width:100%; border-collapse:collapse; margin-top:20px; color:white;"><tr><th style="border:1px solid #334155; padding:10px;">번호</th><th style="border:1px solid #334155;">제목</th><th style="border:1px solid #334155;">파일</th></tr>';
+        let html = '<table style="width:100%; border-collapse:collapse; margin-top:20px; color:white;"><tr><th style="border:1px solid #334155; padding:10px;">문서번호</th><th style="border:1px solid #334155;">제목</th><th style="border:1px solid #334155;">파일</th></tr>';
         data.forEach(item => {
-            html += `<tr><td style="border:1px solid #334155; padding:10px; text-align:center;">${item.doc_full}</td><td style="border:1px solid #334155; padding:10px;">${item.title}</td><td style="border:1px solid #334155; text-align:center;"><a href="${item.file_url}" target="_blank" style="color:#38bdf8;">보기</a></td></tr>`;
+            html += `<tr><td style="border:1px solid #334155; padding:10px; text-align:center;">${item.doc_dept}-${item.doc_year}-${item.doc_num}</td><td style="border:1px solid #334155; padding:10px;">${item.title}</td><td style="border:1px solid #334155; text-align:center;"><a href="${item.file_url}" target="_blank" style="color:#38bdf8;">보기</a></td></tr>`;
         });
         html += '</table>';
         document.getElementById('contract-list-target').innerHTML = html;
     }
 </script>
-
 </body>
 </html>
