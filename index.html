@@ -32,6 +32,7 @@
         .doc-num-box { display: flex; gap: 10px; align-items: center; }
         
         button.btn-primary { background: var(--accent-color); color: #0f172a; font-weight: bold; padding: 12px 24px; border: none; border-radius: 6px; cursor: pointer; width: 100%; font-size: 16px; }
+        button.btn-secondary { background: #475569; color: white; font-weight: bold; padding: 12px 24px; border: none; border-radius: 6px; cursor: pointer; font-size: 16px; }
         
         .search-bar { display: flex; gap: 15px; margin-bottom: 20px; }
         .table-wrapper { overflow-x: auto; margin-top: 20px; }
@@ -40,6 +41,21 @@
         th { background: #0f172a; color: var(--accent-color); }
         
         .hidden { display: none !important; }
+
+        /* ================= 프린트 아웃 전용 CSS 스타일 ================= */
+        @media print {
+            body { background: white !important; color: black !important; padding: 0; }
+            .nav-tabs, .search-bar, #btn-logout, .btn-primary, .btn-secondary, th:last-child, td:last-child { 
+                display: none !important; /* 네비게이션, 검색창, 로그아웃, 파일보기 컬럼 숨김 */
+            }
+            .page-section { background: white !important; border: none !important; padding: 0 !important; }
+            #section-list { display: block !important; } /* 리스트 섹션은 강제 출력 */
+            table { width: 100% !important; border: 1px solid #000 !important; font-size: 11px; }
+            th, td { border: 1px solid #cbd5e1 !important; color: black !important; padding: 6px !important; }
+            th { background: #f1f5f9 !important; color: black !important; }
+            span { background: none !important; padding: 0 !important; color: black !important; }
+            @page { size: A4 landscape; margin: 10mm; } /* A4 가로 방향 출력 최적화 */
+        }
     </style>
 </head>
 <body>
@@ -149,12 +165,13 @@
 
         <div id="section-list" class="page-section">
             <div class="search-bar">
-                <input type="text" id="search-keyword" placeholder="제목, 상대방, 기안자 통합 키워드 검색..." style="flex: 4;">
-                <button class="btn-primary" style="flex: 1;" onclick="loadContracts()">검색</button>
+                <input type="text" id="search-keyword" placeholder="제목, 상대방, 기안자 통합 키워드 검색..." style="flex: 3;">
+                <button class="btn-primary" style="flex: 0.8;" onclick="loadContracts()">검색</button>
+                <button class="btn-secondary" style="flex: 0.8; background-color: #10b981;" onclick="printTable()">🖨️ 프린트 출력</button>
             </div>
 
             <div class="table-wrapper">
-                <table>
+                <table id="print-target">
                     <thead>
                         <tr>
                             <th>문서번호</th>
@@ -178,7 +195,6 @@
 </div>
 
 <script>
-    // 변수명 충돌 방지를 위해 고유 명칭(supabaseClient) 사용
     const SUPABASE_PROJECT_URL = "https://dqdcoisbtqbkytzvyfct.supabase.co";
     const SUPABASE_PUBLISHABLE_KEY = "sb_publishable_iAeHQcv6_WxXqQvZ3FLWWg_7xN66R6O";
     
@@ -324,6 +340,11 @@
             `;
             tbody.appendChild(tr);
         });
+    }
+
+    // 프린트 기능 수행 함수
+    function printTable() {
+        window.print();
     }
 </script>
 </body>
