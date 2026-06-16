@@ -332,97 +332,7 @@
 
             
 
-            <div id="print-receipt-zone" class="hidden">
-
-                <h1>계약서 등록 확인서</h1>
-
-                <table class="receipt-table">
-
-                    <tr>
-
-                        <th>문서번호</th>
-
-                        <td id="p-doc-num"></td>
-
-                    </tr>
-
-                    <tr>
-
-                        <th>제 목</th>
-
-                        <td id="p-title"></td>
-
-                    </tr>
-
-                    <tr>
-
-                        <th>계약유형</th>
-
-                        <td id="p-type"></td>
-
-                    </tr>
-
-                    <tr>
-
-                        <th>상대방</th>
-
-                        <td id="p-parties"></td>
-
-                    </tr>
-
-                    <tr>
-
-                        <th>계약기간</th>
-
-                        <td id="p-period"></td>
-
-                    </tr>
-
-                    <tr>
-
-                        <th>계약금액</th>
-
-                        <td id="p-amount"></td>
-
-                    </tr>
-
-                    <tr>
-
-                        <th>기안/검토/결재</th>
-
-                        <td id="p-users"></td>
-
-                    </tr>
-
-                    <tr>
-
-                        <th>날인 정보</th>
-
-                        <td id="p-sign"></td>
-
-                    </tr>
-
-                    <tr>
-
-                        <th>갱신조건</th>
-
-                        <td id="p-renew"></td>
-
-                    </tr>
-
-                    <tr>
-
-                        <th>보관(원/사)</th>
-
-                        <td id="p-keeper"></td>
-
-                    </tr>
-
-                </table>
-
-            </div>
-
-        </div>
+            
 
 
 
@@ -436,7 +346,115 @@
 
             </div>
 
+<div id="print-receipt-zone" class="hidden">
 
+<div class="print-form">
+
+<table class="approval-table">
+
+<tr>
+    <td colspan="2">기안문</td>
+    <td id="pf-docnum"></td>
+    <td id="pf-created"></td>
+</tr>
+
+<tr>
+    <td>기안자*</td>
+    <td colspan="3" id="pf-drafter"></td>
+</tr>
+
+<tr>
+    <td>검토자*</td>
+    <td colspan="3" id="pf-reviewer"></td>
+</tr>
+
+<tr>
+    <td>최종 결재자*</td>
+    <td colspan="3" id="pf-approver"></td>
+</tr>
+
+<tr>
+    <td>계약 제목*</td>
+    <td colspan="3" id="pf-title"></td>
+</tr>
+
+<tr>
+    <td rowspan="2">계약 상대방*</td>
+    <td id="pf-party1"></td>
+    <td colspan="2" id="pf-party2"></td>
+</tr>
+
+<tr>
+    <td id="pf-party3"></td>
+    <td colspan="2"></td>
+</tr>
+
+<tr>
+    <td>계약 개시일*</td>
+    <td colspan="3" id="pf-start"></td>
+</tr>
+
+<tr>
+    <td rowspan="2">계약 종료일*<br>(종료 조건)</td>
+    <td colspan="3" id="pf-end"></td>
+</tr>
+
+<tr>
+    <td colspan="3" id="pf-endcond"></td>
+</tr>
+
+<tr>
+    <td>자동갱신 여부*</td>
+    <td id="pf-renew"></td>
+    <td colspan="2"></td>
+</tr>
+
+<tr>
+    <td>갱신 통보 일자</td>
+    <td colspan="3" id="pf-notice"></td>
+</tr>
+
+<tr>
+    <td>원본 날인자*</td>
+    <td colspan="3" id="pf-signer"></td>
+</tr>
+
+<tr>
+    <td>날인 일자 및 일련번호*</td>
+    <td id="pf-signdate"></td>
+    <td colspan="2" id="pf-signnum"></td>
+</tr>
+
+<tr>
+    <td>원본 보관자*</td>
+    <td colspan="3" id="pf-originalkeeper"></td>
+</tr>
+
+<tr>
+    <td>파일 작성자*</td>
+    <td colspan="3" id="pf-filewriter"></td>
+</tr>
+
+<tr>
+    <td>파일 보관자*</td>
+    <td colspan="3" id="pf-filekeeper"></td>
+</tr>
+
+<tr>
+    <td>양식 작성일*</td>
+    <td colspan="3" id="pf-formdate"></td>
+</tr>
+
+<tr>
+    <td>양식 작성시점 관리자*</td>
+    <td id="pf-manager"></td>
+    <td colspan="2" id="pf-director"></td>
+</tr>
+
+</table>
+
+</div>
+</div>
 
             <div class="table-wrapper">
 
@@ -708,25 +726,78 @@
 
             lastSavedContract = contractData;
 
-            document.getElementById('p-doc-num').innerText = `${contractData.doc_dept}-${contractData.doc_year}-${contractData.doc_num}`;
+           const today = new Date();
 
-            document.getElementById('p-title').innerText = contractData.title;
+document.getElementById('pf-docnum').innerText =
+`${contractData.doc_dept}${contractData.doc_year}-${String(contractData.doc_num).padStart(5,'0')}`;
 
-            document.getElementById('p-type').innerText = contractData.contract_type || '-';
+document.getElementById('pf-created').innerText =
+today.toLocaleDateString('ko-KR');
 
-            document.getElementById('p-parties').innerText = [contractData.party_1, contractData.party_2, contractData.party_3].filter(Boolean).join(', ');
+document.getElementById('pf-drafter').innerText =
+contractData.drafter;
 
-            document.getElementById('p-period').innerText = `${contractData.start_date} ~ ${contractData.end_date}`;
+document.getElementById('pf-reviewer').innerText =
+contractData.reviewer;
 
-            document.getElementById('p-amount').innerText = new Intl.NumberFormat('ko-KR', { style: 'currency', currency: 'KRW' }).format(contractData.amount);
+document.getElementById('pf-approver').innerText =
+contractData.approver;
 
-            document.getElementById('p-users').innerText = `${contractData.drafter} / ${contractData.reviewer} / ${contractData.approver}`;
+document.getElementById('pf-title').innerText =
+contractData.title;
 
-            document.getElementById('p-sign').innerText = `${contractData.sign_date} (${contractData.sign_num})`;
+document.getElementById('pf-party1').innerText =
+contractData.party_1 || '-';
 
-            document.getElementById('p-renew').innerText = contractData.auto_renew ? `자동갱신 (${contractData.notice_period}일전 통보)` : '단발성';
+document.getElementById('pf-party2').innerText =
+contractData.party_2 || '-';
 
-            document.getElementById('p-keeper').innerText = `원본: ${contractData.original_keeper || '-'} / 사본: ${contractData.copy_keeper || '-'}`;
+document.getElementById('pf-party3').innerText =
+contractData.party_3 || '-';
+
+document.getElementById('pf-start').innerText =
+contractData.start_date;
+
+document.getElementById('pf-end').innerText =
+contractData.end_date;
+
+document.getElementById('pf-endcond').innerText =
+contractData.end_date;
+
+document.getElementById('pf-renew').innerText =
+contractData.auto_renew ? 'Y' : 'N';
+
+document.getElementById('pf-notice').innerText =
+contractData.notice_period > 0
+? `${contractData.notice_period}일 전`
+: '-';
+
+document.getElementById('pf-signer').innerText =
+contractData.original_signer || '-';
+
+document.getElementById('pf-signdate').innerText =
+contractData.sign_date;
+
+document.getElementById('pf-signnum').innerText =
+contractData.sign_num;
+
+document.getElementById('pf-originalkeeper').innerText =
+contractData.original_keeper || '-';
+
+document.getElementById('pf-filewriter').innerText =
+contractData.drafter;
+
+document.getElementById('pf-filekeeper').innerText =
+contractData.copy_keeper || '-';
+
+document.getElementById('pf-formdate').innerText =
+today.toLocaleDateString('ko-KR');
+
+document.getElementById('pf-manager').innerText =
+contractData.reviewer;
+
+document.getElementById('pf-director').innerText =
+contractData.approver; 
 
             
 
