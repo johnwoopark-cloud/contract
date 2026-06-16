@@ -42,19 +42,29 @@
         
         .hidden { display: none !important; }
 
-        /* 등록 완료 후 화면 확인 및 인쇄를 위한 전용 양식 스타일 */
-        #print-receipt-zone { display: none; background: white; color: black; padding: 30px; border: 2px solid #000; max-width: 800px; margin: 20px auto; border-radius: 8px; }
-        #print-receipt-zone h1 { text-align: center; margin-bottom: 30px; font-size: 24px; text-decoration: underline; color: #000; }
-        .receipt-table { width: 100%; border-collapse: collapse; margin-bottom: 20px; }
-        .receipt-table th, .receipt-table td { border: 1px solid #000 !important; padding: 10px !important; color: black !important; background: none !important; }
-        .receipt-table th { width: 25%; background-color: #f1f5f9 !important; font-weight: bold; text-align: center; }
+        /* ================= 이미지 양식 기반 인쇄 전용 스타일 리디자인 ================= */
+        #print-receipt-zone { display: none; background: white; color: black; padding: 40px; max-width: 820px; margin: 20px auto; }
+        .print-notice { font-size: 14px; font-weight: bold; margin-bottom: 10px; text-align: left; color: black; }
+        
+        .receipt-table { width: 100%; border-collapse: collapse; border: 2px solid #000; table-layout: fixed; }
+        .receipt-table th, .receipt-table td { border: 1px solid #000 !important; padding: 12px 10px !important; color: black !important; background: none !important; font-size: 14px; vertical-align: middle; }
+        .receipt-table th { width: 160px; font-weight: bold; text-align: center; }
+        .receipt-table td { text-align: left; }
+        .text-center { text-align: center !important; }
+        .flex-td { display: flex; justify-content: border-box; padding: 0 !important; }
+        .flex-td > div { flex: 1; padding: 12px 10px; text-align: center; }
+        .flex-td > div:first-child { border-right: 1px solid #000; }
 
         /* ================= 프린트 아웃 시에만 작동하는 CSS 스타일 ================= */
         @media print {
-            body * { visibility: hidden; } /* 브라우저의 전반적인 요소를 모두 숨김 */
-            #print-receipt-zone, #print-receipt-zone * { visibility: visible; } /* 인쇄 전용 존만 인쇄 대상화 */
-            #print-receipt-zone { display: block !important; position: absolute; left: 0; top: 0; width: 100%; border: none; }
-            @page { size: A4 portrait; margin: 20mm; } /* 세로 모드로 출력 최적화 */
+            body { background: white !important; color: black !important; padding: 0; }
+            .container, #main-system, .nav-tabs, #contract-form, .search-bar, .table-wrapper { display: none !important; }
+            body * { visibility: hidden; } 
+            #print-receipt-zone, #print-receipt-zone * { visibility: visible; } 
+            #print-receipt-zone { display: block !important; position: absolute; left: 0; top: 0; width: 100%; max-width: 100%; border: none; padding: 0; }
+            .receipt-table { width: 100% !important; border: 2px solid #000 !important; }
+            .receipt-table th, .receipt-table td { border: 1px solid #000 !important; }
+            @page { size: A4 portrait; margin: 15mm 20mm; }
         }
     </style>
 </head>
@@ -90,18 +100,18 @@
                         <div class="doc-num-box">
                             <select id="doc_dept" required style="flex: 2;">
                                 <option value="">부서 선택</option>
-                                <option value="경영관리">미디어경</option>
-                                <option value="전략기획">미디어전</option>
-                                <option value="해외사업">미디어해</option>
-                                <option value="국내사업">미디어국</option>
-                                <option value="플랫폼사업">미디어플</option>
-                                <option value="드라마프로젝트">미디어드라마프로젝트</option>
-                                <option value="제작운영">미디어제</option>
-                                <option value="문화사업">미디어문</option>
-                                <option value="신사업프로젝트">미디어신사업프로젝트</option>
-                                <option value="디지털서비스1부">미디어디1</option>
-                                <option value="디지털서비스2부">미디어디2</option>
-                                <option value="감사팀">미디어감</option>
+                                <option value="미디어경">미디어경</option>
+                                <option value="미디어전">미디어전</option>
+                                <option value="미디어해">미디어해</option>
+                                <option value="미디어국">미디어국</option>
+                                <option value="미디어플">미디어플</option>
+                                <option value="미디어드라마프로젝트">미디어드라마프로젝트</option>
+                                <option value="미디어제">미디어제</option>
+                                <option value="미디어문">미디어문</option>
+                                <option value="미디어신사업프로젝트">미디어신사업프로젝트</option>
+                                <option value="미디어디1">미디어디1</option>
+                                <option value="미디어디2">미디어디2</option>
+                                <option value="미디어감">미디어감</option>
                             </select>
                             <input type="number" id="doc_year" placeholder="연도(YYYY)" required style="flex: 2;">
                             <input type="number" id="doc_num" placeholder="번호" required style="flex: 1.5;">
@@ -133,7 +143,7 @@
 
                 <div class="form-row">
                     <div class="form-group"><label>*계약개시일자</label><input type="date" id="start_date" required></div>
-                    <div class="form-group"><label>*계약종료일자</label><input type="text" id="end_date" required></div>
+                    <div class="form-group"><label>*계약종료일자(조건)</label><input type="text" id="end_date" required></div>
                     <div class="form-group"><label>계약금액 (KRW)</label><input type="number" id="amount"></div>
                 </div>
 
@@ -142,16 +152,21 @@
                         <input type="checkbox" id="auto_renew" style="width: 20px; height: 20px;" onchange="toggleNoticePeriod()">
                         <label for="auto_renew" style="margin: 0; cursor: pointer;">*자동갱신 여부</label>
                     </div>
-                    <div class="form-group hidden" id="notice-group">
-                        <label>갱신 전 통보 기일 (일 수)</label>
-                        <input type="number" id="notice_period" value="0">
+                    <div class="form-group" id="notice-group">
+                        <label>갱신 통보 일자(조건)</label>
+                        <input type="text" id="notice_period" placeholder="예: 2심 항소 기간 이내">
                     </div>
                 </div>
 
                 <div class="form-row">
-                    <div class="form-group"><label>*원본 날인자</label><input type="text" id="original_signer"></div>
-                    <div class="form-group"><label>*원본 보관자</label><input type="text" id="original_keeper"></div>
-                    <div class="form-group"><label>*사본 보관자</label><input type="text" id="copy_keeper"></div>
+                    <div class="form-group"><label>*원본 날인자</label><input type="text" id="original_signer" required></div>
+                    <div class="form-group"><label>*원본 보관자</label><input type="text" id="original_keeper" required></div>
+                    <div class="form-group"><label>*파일 작성자</label><input type="text" id="file_creator" required></div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group"><label>*파일 보관자</label><input type="text" id="file_keeper" required></div>
+                    <div class="form-group"><label>*양식 작성시점 관리자 1</label><input type="text" id="manager_1" placeholder="예: 팀장 이케미" required></div>
+                    <div class="form-group"><label>*양식 작성시점 관리자 2</label><input type="text" id="manager_2" placeholder="예: 부서장 홍케미" required></div>
                 </div>
 
                 <div class="form-group" style="background: #0f172a; padding: 20px; border-radius: 6px;">
@@ -166,47 +181,90 @@
             </form>
             
             <div id="print-receipt-zone" class="hidden">
-                <h1>계약서 등록 확인서</h1>
+                <div class="print-notice">* 표시된 항목은 필수 입력임</div>
                 <table class="receipt-table">
                     <tr>
-                        <th>문서번호</th>
-                        <td id="p-doc-num"></td>
+                        <th class="text-center">기안문</th>
+                        <td class="flex-td">
+                            <div id="p-doc-code"></div>
+                            <div id="p-doc-date"></div>
+                        </td>
                     </tr>
                     <tr>
-                        <th>제 목</th>
-                        <td id="p-title"></td>
+                        <th class="text-center">기안자*</th>
+                        <td id="p-drafter"></td>
                     </tr>
                     <tr>
-                        <th>계약유형</th>
-                        <td id="p-type"></td>
+                        <th class="text-center">검토자*</th>
+                        <td id="p-reviewer"></td>
                     </tr>
                     <tr>
-                        <th>상대방</th>
-                        <td id="p-parties"></td>
+                        <th class="text-center">최종 결재자*</th>
+                        <td id="p-approver"></td>
                     </tr>
                     <tr>
-                        <th>계약기간</th>
-                        <td id="p-period"></td>
+                        <th class="text-center">계약 제목*</th>
+                        <td id="p-title" style="font-weight: bold;"></td>
                     </tr>
                     <tr>
-                        <th>계약금액</th>
-                        <td id="p-amount"></td>
+                        <th class="text-center">계약 상대방*</th>
+                        <td class="flex-td">
+                            <div id="p-party1"></div>
+                            <div id="p-party2"></div>
+                        </td>
                     </tr>
                     <tr>
-                        <th>기안/검토/결재</th>
-                        <td id="p-users"></td>
+                        <th class="text-center">계약 개시일*</th>
+                        <td id="p-start-date"></td>
                     </tr>
                     <tr>
-                        <th>날인 정보</th>
-                        <td id="p-sign"></td>
+                        <th class="text-center">계약 종료일*<br>(종료 조건)</th>
+                        <td id="p-end-date"></td>
                     </tr>
                     <tr>
-                        <th>갱신조건</th>
-                        <td id="p-renew"></td>
+                        <th class="text-center">자동갱신 여부*</th>
+                        <td class="flex-td">
+                            <div id="p-renew-y">Y ☐</div>
+                            <div id="p-renew-n">N ☐</div>
+                        </td>
                     </tr>
                     <tr>
-                        <th>보관(원/사)</th>
-                        <td id="p-keeper"></td>
+                        <th class="text-center">갱신 통보 일자</th>
+                        <td id="p-notice-period"></td>
+                    </tr>
+                    <tr>
+                        <th class="text-center">원본 날인자*</th>
+                        <td id="p-original-signer"></td>
+                    </tr>
+                    <tr>
+                        <th class="text-center">날인 일자 및 일련번호*</th>
+                        <td class="flex-td">
+                            <div id="p-sign-date"></div>
+                            <div id="p-sign-num"></div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th class="text-center">원본 보관자*</th>
+                        <td id="p-original-keeper"></td>
+                    </tr>
+                    <tr>
+                        <th class="text-center">파일 작성자*</th>
+                        <td id="p-file-creator"></td>
+                    </tr>
+                    <tr>
+                        <th class="text-center">파일 보관자*</th>
+                        <td id="p-file-keeper"></td>
+                    </tr>
+                    <tr>
+                        <th class="text-center">양식 작성일*</th>
+                        <td id="p-created-date" class="text-center"></td>
+                    </tr>
+                    <tr>
+                        <th class="text-center">양식 작성시점 관리자*</th>
+                        <td class="flex-td">
+                            <div id="p-manager1"></div>
+                            <div id="p-manager2"></div>
+                        </td>
                     </tr>
                 </table>
             </div>
@@ -224,14 +282,10 @@
                         <tr>
                             <th>문서번호</th>
                             <th>제목</th>
-                            <th>계약유형</th>
                             <th>상대방</th>
                             <th>계약기간</th>
-                            <th>계약금액</th>
                             <th>기안/검토/결재</th>
                             <th>날인 정보</th>
-                            <th>갱신조건</th>
-                            <th>보관(원/사)</th>
                             <th>파일</th>
                         </tr>
                     </thead>
@@ -247,7 +301,7 @@
     const SUPABASE_PUBLISHABLE_KEY = "sb_publishable_iAeHQcv6_WxXqQvZ3FLWWg_7xN66R6O";
     
     const supabaseClient = window.supabase.createClient(SUPABASE_PROJECT_URL, SUPABASE_PUBLISHABLE_KEY);
-    let lastSavedContract = null; // 인쇄 트래킹용 글로벌 변수
+    let lastSavedContract = null;
 
     window.addEventListener('DOMContentLoaded', async () => {
         const { data: { session } } = await supabaseClient.auth.getSession();
@@ -271,16 +325,11 @@
     async function handleLogin() {
         const email = document.getElementById('login-email').value;
         const password = document.getElementById('login-password').value;
-
         if(!email || !password) return alert("아이디와 비밀번호를 모두 입력해주세요.");
 
         const { data, error } = await supabaseClient.auth.signInWithPassword({ email, password });
-
-        if (error) {
-            alert("인증 오류: " + error.message);
-        } else {
-            showSystem();
-        }
+        if (error) alert("인증 오류: " + error.message);
+        else showSystem();
     }
 
     document.getElementById('btn-logout').onclick = async () => {
@@ -295,10 +344,7 @@
     }
 
     function toggleNoticePeriod() {
-        const isChecked = document.getElementById('auto_renew').checked;
-        const group = document.getElementById('notice-group');
-        if (isChecked) group.classList.remove('hidden');
-        else group.classList.add('hidden');
+        // 기존 토글 기능 유지 (필요에 따라 입력 폼 제어 가능)
     }
 
     async function saveContract(e) {
@@ -316,8 +362,10 @@
             .upload(filePath, file);
 
         if (storageError) return alert("파일 업로드 오류: " + storageError.message);
-
         const { data: { publicUrl } } = supabaseClient.storage.from('contract-files').getPublicUrl(filePath);
+
+        const today = new Date();
+        const formattedToday = `${today.getFullYear()}.${today.getMonth()+1}.${today.getDate()}`;
 
         const contractData = {
             doc_dept: document.getElementById('doc_dept').value,
@@ -336,12 +384,15 @@
             start_date: document.getElementById('start_date').value,
             end_date: document.getElementById('end_date').value,
             auto_renew: document.getElementById('auto_renew').checked,
-            notice_period: parseInt(document.getElementById('notice_period').value) || 0,
-            amount: parseFloat(document.getElementById('amount').value) || 0,
-            original_signer: document.getElementById('original_signer').value || null,
-            original_keeper: document.getElementById('original_keeper').value || null,
-            copy_keeper: document.getElementById('copy_keeper').value || null,
-            file_url: publicUrl
+            notice_period: document.getElementById('notice_period').value || '-',
+            original_signer: document.getElementById('original_signer').value,
+            original_keeper: document.getElementById('original_keeper').value,
+            file_creator: document.getElementById('file_creator').value,
+            file_keeper: document.getElementById('file_keeper').value,
+            manager_1: document.getElementById('manager_1').value,
+            manager_2: document.getElementById('manager_2').value,
+            file_url: publicUrl,
+            created_date_str: formattedToday
         };
 
         const { error: dbError } = await supabaseClient.from('contracts').insert([contractData]);
@@ -349,32 +400,54 @@
         if (dbError) {
             alert("DB 저장 오류: " + dbError.message);
         } else {
-            alert("계약서가 성공적으로 등록되었습니다.\n등록된 내용을 인쇄하려면 아래 생성된 [등록 내용 인쇄] 버튼을 눌러주세요.");
+            alert("계약서가 성공적으로 등록되었습니다.\n[등록 내용 인쇄] 버튼을 누르면 서식 양식으로 출력됩니다.");
             
-            // 전역 인쇄 변수에 매핑 및 인쇄 테이블 동적 바인딩
             lastSavedContract = contractData;
-            document.getElementById('p-doc-num').innerText = `${contractData.doc_dept}-${contractData.doc_year}-${contractData.doc_num}`;
+
+            // 데이터 바인딩 연산 - 제공된 대장 이미지 서식 구조 매핑
+            document.getElementById('p-doc-code').innerText = `${contractData.doc_dept}${contractData.doc_year}-${String(contractData.doc_num).padStart(5, '0')}`;
+            document.getElementById('p-doc-date').innerText = contractData.sign_date.replace(/-/g, '.');
+            document.getElementById('p-drafter').innerText = contractData.drafter;
+            document.getElementById('p-reviewer').innerText = contractData.reviewer;
+            document.getElementById('p-approver').innerText = contractData.approver;
             document.getElementById('p-title').innerText = contractData.title;
-            document.getElementById('p-type').innerText = contractData.contract_type || '-';
-            document.getElementById('p-parties').innerText = [contractData.party_1, contractData.party_2, contractData.party_3].filter(Boolean).join(', ');
-            document.getElementById('p-period').innerText = `${contractData.start_date} ~ ${contractData.end_date}`;
-            document.getElementById('p-amount').innerText = new Intl.NumberFormat('ko-KR', { style: 'currency', currency: 'KRW' }).format(contractData.amount);
-            document.getElementById('p-users').innerText = `${contractData.drafter} / ${contractData.reviewer} / ${contractData.approver}`;
-            document.getElementById('p-sign').innerText = `${contractData.sign_date} (${contractData.sign_num})`;
-            document.getElementById('p-renew').innerText = contractData.auto_renew ? `자동갱신 (${contractData.notice_period}일전 통보)` : '단발성';
-            document.getElementById('p-keeper').innerText = `원본: ${contractData.original_keeper || '-'} / 사본: ${contractData.copy_keeper || '-'}`;
             
-            // 인쇄 확인 버튼 및 확인 구역 노출 활성화
+            document.getElementById('p-party1').innerText = contractData.party_1;
+            document.getElementById('p-party2').innerText = contractData.party_2 || '-';
+            
+            document.getElementById('p-start-date').innerText = contractData.start_date.replace(/-/g, '.');
+            document.getElementById('p-end-date').innerText = contractData.end_date; // 조건형 텍스트 대응 가능하도록 유지
+            
+            // 체크박스 특수문자 로직 변경 (Y / N 분기 표시)
+            if (contractData.auto_renew) {
+                document.getElementById('p-renew-y').innerHTML = "Y ■";
+                document.getElementById('p-renew-n').innerHTML = "N ☐";
+            } else {
+                document.getElementById('p-renew-y').innerHTML = "Y ☐";
+                document.getElementById('p-renew-n').innerHTML = "N ■";
+            }
+
+            document.getElementById('p-notice-period').innerText = contractData.notice_period;
+            document.getElementById('p-original-signer').innerText = contractData.original_signer;
+            
+            document.getElementById('p-sign-date').innerText = contractData.sign_date.replace(/-/g, '.');
+            document.getElementById('p-sign-num').innerText = String(contractData.sign_num).padStart(3, '0');
+            
+            document.getElementById('p-original-keeper').innerText = contractData.original_keeper;
+            document.getElementById('p-file-creator').innerText = contractData.file_creator;
+            document.getElementById('p-file-keeper').innerText = contractData.file_keeper;
+            document.getElementById('p-created-date').innerText = contractData.created_date_str;
+            
+            document.getElementById('p-manager1').innerText = contractData.manager_1;
+            document.getElementById('p-manager2').innerText = contractData.manager_2;
+
             document.getElementById('btn-print-receipt').classList.remove('hidden');
             document.getElementById('print-receipt-zone').classList.remove('hidden');
         }
     }
 
-    // 인쇄 실행 함수
     function printCurrentContract() {
-        if (!lastSavedContract) {
-            return alert("출력할 저장 완료 데이터가 기록되지 않았습니다.");
-        }
+        if (!lastSavedContract) return alert("출력할 저장 완료 데이터가 기록되지 않았습니다.");
         window.print();
     }
 
@@ -393,21 +466,15 @@
         tbody.innerHTML = "";
 
         data.forEach(item => {
-            const parties = [item.party_1, item.party_2, item.party_3].filter(Boolean).join(', ');
-            const formattedAmount = new Intl.NumberFormat('ko-KR', { style: 'currency', currency: 'KRW' }).format(item.amount);
-            
+            const parties = [item.party_1, item.party_2].filter(Boolean).join(', ');
             const tr = document.createElement('tr');
             tr.innerHTML = `
                 <td><b>${item.doc_dept}-${item.doc_year}-${item.doc_num}</b></td>
                 <td>${item.title}</td>
-                <td><span style="background:#475569; padding:2px 6px; border-radius:4px; font-size:12px;">${item.contract_type}</span></td>
                 <td>${parties}</td>
                 <td><small>${item.start_date} ~ ${item.end_date}</small></td>
-                <td>${formattedAmount}</td>
                 <td><small>${item.drafter} / ${item.reviewer} / ${item.approver}</small></td>
                 <td><small>${item.sign_date} (${item.sign_num})</small></td>
-                <td>${item.auto_renew ? `자동갱신 (${item.notice_period}일전 통보)` : '단발성'}</td>
-                <td><small>원: ${item.original_keeper || '-'}<br>사: ${item.copy_keeper || '-'}</small></td>
                 <td><a href="${item.file_url}" target="_blank" style="color:var(--accent-color); text-decoration:none;">💾 보기</a></td>
             `;
             tbody.appendChild(tr);
