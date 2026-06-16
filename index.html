@@ -729,6 +729,10 @@
 
     async function saveContract(e) {
 
+        console.log("saveContract 시작");
+
+    e.preventDefault();
+
         e.preventDefault();
 
         const fileInput = document.getElementById('contract_file');
@@ -761,7 +765,7 @@
 
         const { data: { publicUrl } } = supabaseClient.storage.from('contract-files').getPublicUrl(filePath);
 
-
+console.log("contractData 생성 직전");
 
         const contractData = {
 
@@ -815,7 +819,7 @@
 
         const { error: dbError } = await supabaseClient.from('contracts').insert([contractData]);
 
-
+console.log("DB 저장 직전");
 
         if (dbError) {
 
