@@ -98,6 +98,111 @@
 
         .receipt-table th { width: 25%; background-color: #f1f5f9 !important; font-weight: bold; text-align: center; }
 
+/* ================================= */
+/* 계약관리대장 인쇄 양식 */
+/* ================================= */
+
+.print-form {
+    width: 100%;
+    background: white;
+    color: black;
+}
+
+.approval-table {
+    width: 100%;
+    border-collapse: collapse;
+    table-layout: fixed;
+    font-size: 14px;
+}
+
+.approval-table td {
+    border: 1px solid #000;
+    padding: 8px;
+    color: black;
+    vertical-align: middle;
+    word-break: break-word;
+}
+
+.approval-table tr {
+    height: 45px;
+}
+
+/* 첫 번째 열 */
+.approval-table td:first-child {
+    width: 180px;
+    text-align: center;
+    font-weight: bold;
+    background: #f5f5f5;
+}
+
+/* 문서번호 행 */
+.approval-table tr:first-child td {
+    height: 50px;
+    font-size: 16px;
+}
+
+/* 계약 제목 */
+#pf-title {
+    font-weight: bold;
+    font-size: 18px;
+    text-align: center;
+}
+
+/* 계약상대방 */
+#pf-party1,
+#pf-party2,
+#pf-party3 {
+    text-align: center;
+}
+
+/* 날짜 */
+#pf-created,
+#pf-start,
+#pf-end,
+#pf-signdate {
+    text-align: center;
+}
+
+/* 자동갱신 */
+#pf-renew {
+    font-size: 16px;
+    font-weight: bold;
+}
+
+/* 인쇄시 */
+@media print {
+
+    body * {
+        visibility: hidden;
+    }
+
+    #print-receipt-zone,
+    #print-receipt-zone * {
+        visibility: visible;
+    }
+
+    #print-receipt-zone {
+        display: block !important;
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 100%;
+        border: none;
+        padding: 0;
+        margin: 0;
+    }
+
+    .approval-table {
+        font-size: 12pt;
+    }
+
+    @page {
+        size: A4 portrait;
+        margin: 10mm;
+    }
+}
+        
+
 
 
         /* ================= 프린트 아웃 시에만 작동하는 CSS 스타일 ================= */
