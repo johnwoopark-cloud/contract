@@ -139,7 +139,7 @@
 <div id="login-screen">
   <div class="login-box">
     <h1>언론중재 사건 관리</h1>
-    <p>KBS미디어 내부 시스템</p>
+    <p>KBS 법무실 내부 시스템</p>
     <input type="password" id="pw-input" placeholder="비밀번호 입력" onkeydown="if(event.key==='Enter')doLogin()">
     <button onclick="doLogin()">로그인</button>
     <p id="login-err" style="color:#E24B4A;font-size:12px;margin-top:8px;display:none">비밀번호가 올바르지 않습니다.</p>
@@ -160,8 +160,8 @@
     <!-- 탭 -->
     <div class="tab-nav">
       <button class="tab-btn active" onclick="switchTab('list')">사건 목록</button>
-      <button class="tab-btn" onclick="switchTab('form')" id="tab-form">새 사건 등록</button>
-      <button class="tab-btn" onclick="switchTab('detail')" id="tab-detail" style="display:none">사건 상세</button>
+      <button class="tab-btn" onclick="switchTab('form')">새 사건 등록</button>
+      <button class="tab-btn" onclick="switchTab('detail')" id="tab-detail-btn" style="display:none">사건 상세</button>
     </div>
 
     <!-- 목록 탭 -->
@@ -188,7 +188,7 @@
     </div>
 
     <!-- 등록 탭 -->
-    <div id="tab-form" style="display:none">
+    <div id="tab-form-content" style="display:none">
       <div class="step-nav">
         <div class="step-item active" id="snav1" onclick="goStep(1)">1. 사건 기본</div>
         <div class="step-item" id="snav2" onclick="goStep(2)">2. 대응 이력</div>
@@ -414,20 +414,21 @@ function logout() {
 
 // ── 탭 전환 ───────────────────────────────────────────
 function switchTab(name) {
-  ['list','form','detail'].forEach(t => {
-    document.getElementById('tab-' + t).style.display = 'none';
-    const btn = document.querySelector(`.tab-btn[onclick="switchTab('${t}')"]`);
-    if (btn) btn.classList.remove('active');
+  ['tab-list','tab-form-content','tab-detail'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.style.display = 'none';
   });
-  document.getElementById('tab-' + name).style.display = 'block';
-  const activeBtn = document.querySelector(`.tab-btn[onclick="switchTab('${name}')"]`);
-  if (activeBtn) activeBtn.classList.add('active');
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  const targetId = name === 'form' ? 'tab-form-content' : name === 'detail' ? 'tab-detail' : 'tab-list';
+  const el = document.getElementById(targetId);
+  if (el) el.style.display = 'block';
+  const idx = name === 'list' ? 0 : name === 'form' ? 1 : 2;
+  const btns = document.querySelectorAll('.tab-btn');
+  if (btns[idx]) btns[idx].classList.add('active');
 }
 function showNewForm() {
   resetForm();
   switchTab('form');
-  document.getElementById('tab-form-btn') && null;
-  document.querySelectorAll('.tab-btn')[1].classList.add('active');
 }
 
 // ── 사건 목록 ─────────────────────────────────────────
