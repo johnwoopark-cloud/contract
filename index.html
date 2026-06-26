@@ -227,6 +227,7 @@
           <div class="field-grid col2" style="margin-top:14px">
             <div class="field"><label>중재부</label>
               <select id="f-arb-org">
+                <option value=""></option>
                 <option>서울중재부</option><option>부산중재부</option><option>대구중재부</option>
                 <option>광주중재부</option><option>대전중재부</option><option>경기중재부</option>
                 <option>강원중재부</option><option>충북중재부</option><option>전북중재부</option>
@@ -434,9 +435,14 @@ async function showDetail(id) {
   detailOutcomeType = out ? out.outcome_type : '진행중';
 
   // ─ 사건 기본 ─
+  const courtOpts = ['','2026서울조정','2026부산조정','2026대구조정','2026광주조정','2026대전조정','2026경기조정','2026강원조정','2026충북조정','2026전북조정','2026경남조정','2026제주조정','2025서울조정','2025부산조정','2025대구조정','2025광주조정','2025대전조정','2025경기조정','2025강원조정','2025충북조정','2025전북조정','2025경남조정','2025제주조정'];
+  const arbOpts = ['','서울중재부','부산중재부','대구중재부','광주중재부','대전중재부','경기중재부','강원중재부','충북중재부','전북중재부','경남중재부','제주중재부'];
   let html = `
     <div class="detail-section">
-      <div class="detail-section-header"><h3>사건 기본</h3></div>
+      <div class="detail-section-header">
+        <h3>사건 기본</h3>
+        <button class="btn btn-sm btn-success" onclick="togglePanel('d-basic-panel')">✏️ 수정</button>
+      </div>
       <div class="detail-row"><span class="detail-label">발송일</span>${c.broadcast_date||'-'}</div>
       <div class="detail-row"><span class="detail-label">신청인</span><strong>${c.applicant_name}</strong></div>
       <div class="detail-row"><span class="detail-label">피신청인</span>${c.respondent_name}</div>
@@ -445,13 +451,67 @@ async function showDetail(id) {
       <div class="detail-row"><span class="detail-label">사건번호</span>${(nums||[]).map(n=>n.court+n.case_number+' ('+n.respondent_target+')').join('<br>')||'-'}</div>
       <div class="detail-row"><span class="detail-label">대상 보도</span>${c.target_program||'-'}</div>
       <div class="detail-row"><span class="detail-label">기사 제목</span>${c.content_title||'-'}</div>
+      <div class="add-panel" id="d-basic-panel" style="display:none">
+        <h4>사건 기본 수정</h4>
+        <div class="field-grid col2">
+          <div class="field"><label>발송일</label><input type="date" id="d-broadcast-date" value="${c.broadcast_date||''}"></div>
+          <div class="field"><label>신청일</label><input type="date" id="d-application-date" value="${c.application_date||''}"></div>
+        </div>
+        <div class="field-grid col2" style="margin-top:10px">
+          <div class="field"><label>신청인</label><input type="text" id="d-applicant" value="${c.applicant_name||''}"></div>
+          <div class="field"><label>피신청인</label><input type="text" id="d-respondent" value="${c.respondent_name||''}"></div>
+        </div>
+        <div class="field-grid col2" style="margin-top:10px">
+          <div class="field"><label>청구 유형</label>
+            <select id="d-claim-type">
+              ${['반론','정정','정정·반론·손배','추후·손배'].map(v=>`<option${c.claim_type===v?' selected':''}>${v}</option>`).join('')}
+            </select>
+          </div>
+          <div class="field"><label>보도 일자</label><input type="date" id="d-content-date" value="${c.broadcast_content_date||''}"></div>
+        </div>
+        <div class="field-grid" style="margin-top:10px">
+          <div class="field"><label>프로그램</label><input type="text" id="d-program" value="${c.target_program||''}"></div>
+        </div>
+        <div class="field-grid" style="margin-top:10px">
+          <div class="field"><label>기사 제목</label><input type="text" id="d-title" value="${c.content_title||''}"></div>
+        </div>
+        <div style="display:flex;gap:8px;justify-content:flex-end;margin-top:10px">
+          <button class="btn btn-sm" onclick="togglePanel('d-basic-panel')">취소</button>
+          <button class="btn btn-sm btn-primary" onclick="saveDetailBasic(${id})">저장</button>
+        </div>
+      </div>
     </div>
     <div class="detail-section">
-      <div class="detail-section-header"><h3>담당자</h3></div>
+      <div class="detail-section-header">
+        <h3>담당자</h3>
+        <button class="btn btn-sm btn-success" onclick="togglePanel('d-contact-panel')">✏️ 수정</button>
+      </div>
       <div class="detail-row"><span class="detail-label">담당 기자</span>${c.assigned_reporter||'-'}${c.reporter_org?' ('+c.reporter_org+')':''}</div>
       <div class="detail-row"><span class="detail-label">KBS 법무 담당</span>${c.kbs_attorney||'-'}</div>
       <div class="detail-row"><span class="detail-label">중재부</span>${c.arbitration_org||'-'}</div>
       <div class="detail-row"><span class="detail-label">조정기일</span>${c.scheduled_date||'-'}</div>
+      <div class="add-panel" id="d-contact-panel" style="display:none">
+        <h4>담당자 수정</h4>
+        <div class="field-grid col2">
+          <div class="field"><label>담당 기자</label><input type="text" id="d-reporter" value="${c.assigned_reporter||''}"></div>
+          <div class="field"><label>소속 총국</label><input type="text" id="d-reporter-org" value="${c.reporter_org||''}"></div>
+        </div>
+        <div class="field-grid col2" style="margin-top:10px">
+          <div class="field"><label>KBS 법무 담당</label><input type="text" id="d-attorney" value="${c.kbs_attorney||''}"></div>
+          <div class="field"><label>중재부</label>
+            <select id="d-arb-org">
+              ${arbOpts.map(v=>`<option${c.arbitration_org===v?' selected':''}>${v}</option>`).join('')}
+            </select>
+          </div>
+        </div>
+        <div class="field-grid" style="margin-top:10px">
+          <div class="field"><label>조정기일</label><input type="datetime-local" id="d-scheduled" value="${c.scheduled_date||''}"></div>
+        </div>
+        <div style="display:flex;gap:8px;justify-content:flex-end;margin-top:10px">
+          <button class="btn btn-sm" onclick="togglePanel('d-contact-panel')">취소</button>
+          <button class="btn btn-sm btn-primary" onclick="saveDetailContact(${id})">저장</button>
+        </div>
+      </div>
     </div>`;
 
   // ─ 대응 이력 (+ 추가 버튼) ─
@@ -555,16 +615,18 @@ async function showDetail(id) {
     <input type="file" id="d-file-input" multiple accept=".pdf,.docx" style="display:none" onchange="uploadDetailFiles(${id},this.files)">
     <div class="file-list" id="d-file-list">`;
   if (docs && docs.length > 0) {
-    html += docs.map(d => {
-      const { data: urlData } = db.storage.from('case-documents').getPublicUrl(d.file_path);
-      const url = urlData ? urlData.publicUrl : '#';
+    // 서명된 URL 생성 (1시간 유효)
+    const fileHtmlArr = await Promise.all(docs.map(async d => {
+      const { data: signedData } = await db.storage.from('case-documents').createSignedUrl(d.file_path, 3600);
+      const url = signedData ? signedData.signedUrl : '#';
       return `<div class="file-item">
         📄 <span title="${d.file_name}">${d.file_name}</span>
         <span class="file-size">${d.file_size?Math.round(d.file_size/1024)+'KB':''}</span>
         <a href="${url}" target="_blank" rel="noopener" class="btn btn-sm">열기</a>
         <button class="btn btn-sm btn-danger" onclick="deleteFile(${d.id},'${d.file_path}')">삭제</button>
       </div>`;
-    }).join('');
+    }));
+    html += fileHtmlArr.join('');
   } else {
     html += '<p style="font-size:13px;color:#aaa">첨부된 파일이 없습니다.</p>';
   }
@@ -573,6 +635,41 @@ async function showDetail(id) {
   document.getElementById('detail-content').innerHTML = html;
   document.getElementById('tab-detail-btn').style.display = '';
   switchTab('detail');
+}
+
+// ── 사건 기본 수정 저장 ──
+async function saveDetailBasic(caseId) {
+  const { error } = await db.from('cases').update({
+    broadcast_date: document.getElementById('d-broadcast-date').value || null,
+    application_date: document.getElementById('d-application-date').value || null,
+    applicant_name: document.getElementById('d-applicant').value,
+    respondent_name: document.getElementById('d-respondent').value,
+    claim_type: document.getElementById('d-claim-type').value,
+    broadcast_content_date: document.getElementById('d-content-date').value || null,
+    target_program: document.getElementById('d-program').value,
+    content_title: document.getElementById('d-title').value,
+    updated_at: new Date().toISOString()
+  }).eq('id', caseId);
+  if (error) { showToast('저장 실패: ' + error.message); return; }
+  showToast('✅ 사건 기본 정보가 수정되었습니다.');
+  await loadCases();
+  showDetail(caseId);
+}
+
+// ── 담당자 수정 저장 ──
+async function saveDetailContact(caseId) {
+  const { error } = await db.from('cases').update({
+    assigned_reporter: document.getElementById('d-reporter').value,
+    reporter_org: document.getElementById('d-reporter-org').value,
+    kbs_attorney: document.getElementById('d-attorney').value,
+    arbitration_org: document.getElementById('d-arb-org').value,
+    scheduled_date: document.getElementById('d-scheduled').value || null,
+    updated_at: new Date().toISOString()
+  }).eq('id', caseId);
+  if (error) { showToast('저장 실패: ' + error.message); return; }
+  showToast('✅ 담당자 정보가 수정되었습니다.');
+  await loadCases();
+  showDetail(caseId);
 }
 
 // ── 상세 이력 저장 ──
@@ -626,14 +723,24 @@ async function saveDetailOutcome(caseId, existingId) {
 async function uploadDetailFiles(caseId, files) {
   if (!files || files.length === 0) return;
   showToast('업로드 중...');
+  let successCount = 0;
   for (const file of Array.from(files)) {
     const path = caseId + '/' + Date.now() + '_' + file.name;
     const { error: upErr } = await db.storage.from('case-documents').upload(path, file);
     if (upErr) { showToast('업로드 실패: ' + upErr.message); continue; }
-    await db.from('case_documents').insert({ case_id: caseId, file_name: file.name, file_path: path, file_size: file.size });
+    const { error: dbErr } = await db.from('case_documents').insert({ case_id: caseId, file_name: file.name, file_path: path, file_size: file.size });
+    if (!dbErr) successCount++;
   }
-  showToast('✅ 파일 업로드 완료');
-  showDetail(caseId);
+  // input 초기화 (같은 파일 재업로드 가능하도록)
+  const inp = document.getElementById('d-file-input');
+  if (inp) inp.value = '';
+  if (successCount > 0) {
+    showToast('✅ ' + successCount + '개 파일 업로드 완료');
+  }
+  // 상세 화면 전체 새로고침
+  currentCaseId = caseId;
+  await loadCases();
+  await showDetail(caseId);
 }
 
 // ── 파일 삭제 ──
