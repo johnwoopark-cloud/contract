@@ -612,7 +612,7 @@ function renderCaseNums() {
   document.getElementById('case-num-rows').innerHTML = caseNums.map((cn,i) => `
     <div class="case-num-row">
       <select onchange="caseNums[${i}].court=this.value" style="flex:1.5">
-        ${['2026서울조정','2026부산조정','2026대구조정','2026광주조정','2026경기조정','2026강원조정','2026충북조정','20026전북조정','2026경남조정','2026제주조정','2025서울조정','2025부산조정','2025대구조정','2025광주조정','2025경기조정','2025강원조정','2025충북조정','2025전북조정','2025경남조정','2025제주조정'].map(v=>`<option${cn.court===v?' selected':''}>${v}</option>`).join('')}
+        ${['2026서울조정','2026부산조정','2026대구조정','2026광주조정','2026경기조정','2026강원조정','2026충북조정','2026전북조정','2026경남조정','2026제주조정','2025서울조정','2025부산조정','2025대구조정','2025광주조정','2025경기조정','2025강원조정','2025충북조정','2025전북조정','2025경남조정','2025제주조정'].map(v=>`<option${cn.court===v?' selected':''}>${v}</option>`).join('')}
       </select>
       <input type="text" placeholder="번호" value="${cn.num}" oninput="caseNums[${i}].num=this.value" style="flex:0.8">
       <select onchange="caseNums[${i}].target=this.value" style="flex:1.2">
