@@ -9,7 +9,6 @@
   * { box-sizing: border-box; margin: 0; padding: 0; }
   body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #f5f5f0; color: #1a1a1a; font-size: 15px; }
 
-  /* 로그인 */
   #login-screen { display: flex; align-items: center; justify-content: center; min-height: 100vh; }
   .login-box { background: #fff; border: 1px solid #e0e0e0; border-radius: 12px; padding: 2.5rem; width: 360px; }
   .login-box h1 { font-size: 20px; font-weight: 500; margin-bottom: 8px; }
@@ -17,19 +16,16 @@
   .login-box input { width: 100%; padding: 10px 12px; border: 1px solid #ddd; border-radius: 8px; font-size: 14px; margin-bottom: 12px; }
   .login-box button { width: 100%; padding: 11px; background: #1a1a1a; color: #fff; border: none; border-radius: 8px; font-size: 14px; cursor: pointer; }
 
-  /* 레이아웃 */
   #app { display: none; }
   .topbar { background: #fff; border-bottom: 1px solid #e8e8e8; padding: 0 24px; height: 56px; display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; z-index: 100; }
   .topbar h1 { font-size: 16px; font-weight: 500; }
   .topbar-right { display: flex; gap: 12px; align-items: center; }
   .main { max-width: 900px; margin: 0 auto; padding: 24px 16px; }
 
-  /* 탭 */
   .tab-nav { display: flex; gap: 4px; margin-bottom: 24px; background: #efefea; border-radius: 10px; padding: 4px; }
   .tab-btn { flex: 1; padding: 8px; border: none; background: transparent; border-radius: 7px; font-size: 14px; cursor: pointer; color: #888; }
   .tab-btn.active { background: #fff; color: #1a1a1a; font-weight: 500; box-shadow: 0 1px 3px rgba(0,0,0,0.08); }
 
-  /* 목록 */
   .list-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; }
   .list-header h2 { font-size: 16px; font-weight: 500; }
   .case-table { width: 100%; border-collapse: collapse; background: #fff; border-radius: 12px; overflow: hidden; border: 1px solid #e8e8e8; }
@@ -44,15 +40,15 @@
   .badge-취하 { background: #FAEEDA; color: #854F0B; }
   .empty-state { text-align: center; padding: 60px 20px; color: #aaa; font-size: 14px; }
 
-  /* 버튼 */
   .btn { padding: 9px 18px; border-radius: 8px; font-size: 14px; cursor: pointer; border: 1px solid #ddd; background: #fff; color: #1a1a1a; }
   .btn-primary { background: #1a1a1a; color: #fff; border-color: #1a1a1a; }
+  .btn-success { background: #1D9E75; color: #fff; border-color: #1D9E75; }
   .btn-danger { background: #fff; color: #A32D2D; border-color: #f0c0c0; }
+  .btn-sm { padding: 5px 12px; font-size: 12px; }
   .btn:hover { opacity: 0.85; }
 
-  /* 폼 패널 */
   .form-panel { background: #fff; border: 1px solid #e8e8e8; border-radius: 12px; padding: 24px; margin-bottom: 16px; }
-  .form-panel h3 { font-size: 14px; font-weight: 500; color: #888; text-transform: uppercase; letter-spacing: 0.04em; margin-bottom: 16px; }
+  .form-panel h3 { font-size: 13px; font-weight: 500; color: #888; text-transform: uppercase; letter-spacing: 0.04em; margin-bottom: 16px; }
   .field-grid { display: grid; gap: 14px; }
   .field-grid.col2 { grid-template-columns: 1fr 1fr; }
   .field-grid.col3 { grid-template-columns: 1fr 1fr 1fr; }
@@ -63,7 +59,6 @@
   .field input:focus, .field select:focus, .field textarea:focus { outline: none; border-color: #999; }
   .required { color: #E24B4A; }
 
-  /* 스텝 네비 */
   .step-nav { display: flex; gap: 0; margin-bottom: 24px; border: 1px solid #e0e0e0; border-radius: 10px; overflow: hidden; }
   .step-item { flex: 1; padding: 10px 8px; text-align: center; font-size: 13px; color: #aaa; background: #fafaf8; border-right: 1px solid #e0e0e0; cursor: pointer; }
   .step-item:last-child { border-right: none; }
@@ -72,12 +67,10 @@
   .step-content { display: none; }
   .step-content.active { display: block; }
 
-  /* 사건번호 행 */
   .case-num-row { display: flex; gap: 8px; align-items: center; margin-bottom: 8px; }
   .case-num-row input, .case-num-row select { flex: 1; }
   .icon-btn { width: 32px; height: 32px; border-radius: 50%; border: 1px solid #ddd; background: #fff; cursor: pointer; font-size: 16px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
 
-  /* 이벤트 목록 */
   .event-list { display: flex; flex-direction: column; gap: 8px; margin-bottom: 12px; }
   .event-item { display: flex; gap: 12px; align-items: center; padding: 10px 14px; border: 1px solid #eee; border-radius: 8px; background: #fafaf8; }
   .event-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
@@ -86,56 +79,56 @@
   .dot-조정기일 { background: #BA7517; }
   .dot-종결통지 { background: #999; }
   .dot-후속조치 { background: #534AB7; }
+  .dot-소송전환 { background: #E24B4A; }
   .event-label { font-size: 14px; flex: 1; }
-  .event-date { font-size: 12px; color: #aaa; }
+  .event-date { font-size: 12px; color: #aaa; white-space: nowrap; }
 
-  /* 결과 카드 */
   .outcome-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 16px; }
   .outcome-card { border: 1px solid #e0e0e0; border-radius: 10px; padding: 14px; cursor: pointer; }
   .outcome-card.selected { border: 2px solid #185FA5; background: #E6F1FB; }
   .outcome-card .oc-title { font-size: 14px; font-weight: 500; margin-top: 4px; }
   .outcome-card .oc-desc { font-size: 12px; color: #aaa; margin-top: 2px; }
 
-  /* 파일 업로드 */
   .file-drop { border: 2px dashed #ddd; border-radius: 10px; padding: 28px; text-align: center; cursor: pointer; color: #aaa; font-size: 14px; transition: border-color 0.2s; }
   .file-drop:hover, .file-drop.dragover { border-color: #378ADD; color: #378ADD; }
   .file-drop input { display: none; }
   .file-list { margin-top: 12px; display: flex; flex-direction: column; gap: 6px; }
   .file-item { display: flex; gap: 10px; align-items: center; padding: 8px 12px; border: 1px solid #eee; border-radius: 8px; font-size: 13px; }
-  .file-item span { flex: 1; }
-  .file-size { color: #aaa; font-size: 12px; }
+  .file-item span { flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .file-size { color: #aaa; font-size: 12px; flex-shrink: 0; }
 
-  /* 하단 바 */
   .form-bottom { display: flex; justify-content: space-between; align-items: center; padding-top: 16px; margin-top: 8px; border-top: 1px solid #eee; }
 
-  /* 확인 테이블 */
   .confirm-table { width: 100%; border-collapse: collapse; }
   .confirm-table td { padding: 11px 0; font-size: 14px; border-bottom: 1px solid #f0f0f0; }
   .confirm-table td:first-child { color: #888; width: 38%; }
 
   /* 상세 보기 */
   .detail-section { background: #fff; border: 1px solid #e8e8e8; border-radius: 12px; padding: 20px; margin-bottom: 14px; }
-  .detail-section h3 { font-size: 13px; font-weight: 500; color: #888; text-transform: uppercase; letter-spacing: 0.04em; margin-bottom: 14px; }
+  .detail-section-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; }
+  .detail-section-header h3 { font-size: 13px; font-weight: 500; color: #888; text-transform: uppercase; letter-spacing: 0.04em; margin: 0; }
   .detail-row { display: flex; padding: 9px 0; border-bottom: 1px solid #f5f5f5; font-size: 14px; }
   .detail-row:last-child { border-bottom: none; }
   .detail-label { color: #888; width: 38%; flex-shrink: 0; }
 
-  /* 토스트 */
-  #toast { position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%); background: #1a1a1a; color: #fff; padding: 12px 24px; border-radius: 99px; font-size: 14px; display: none; z-index: 999; }
+  /* 추가 입력 패널 */
+  .add-panel { background: #f8fdf8; border: 1px solid #c8e6c9; border-radius: 10px; padding: 16px; margin-top: 14px; }
+  .add-panel h4 { font-size: 13px; font-weight: 500; color: #2e7d32; margin-bottom: 12px; }
+  .add-panel .field input, .add-panel .field select, .add-panel .field textarea { font-size: 13px; padding: 7px 10px; }
+  .add-panel .field-grid.col2 { grid-template-columns: 1fr 1fr; }
 
-  /* 로딩 */
-  .spinner { display: inline-block; width: 16px; height: 16px; border: 2px solid #ddd; border-top-color: #1a1a1a; border-radius: 50%; animation: spin 0.6s linear infinite; }
+  #toast { position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%); background: #1a1a1a; color: #fff; padding: 12px 24px; border-radius: 99px; font-size: 14px; display: none; z-index: 999; }
+  .spinner { display: inline-block; width: 16px; height: 16px; border: 2px solid rgba(255,255,255,0.3); border-top-color: #fff; border-radius: 50%; animation: spin 0.6s linear infinite; vertical-align: middle; }
   @keyframes spin { to { transform: rotate(360deg); } }
 
   @media (max-width: 600px) {
-    .field-grid.col2, .field-grid.col3 { grid-template-columns: 1fr; }
+    .field-grid.col2, .field-grid.col3, .add-panel .field-grid.col2 { grid-template-columns: 1fr; }
     .outcome-grid { grid-template-columns: 1fr; }
   }
 </style>
 </head>
 <body>
 
-<!-- 로그인 -->
 <div id="login-screen">
   <div class="login-box">
     <h1>언론중재 사건 관리</h1>
@@ -146,7 +139,6 @@
   </div>
 </div>
 
-<!-- 앱 -->
 <div id="app">
   <div class="topbar">
     <h1>⚖️ 언론중재 사건 관리</h1>
@@ -157,14 +149,13 @@
   </div>
 
   <div class="main">
-    <!-- 탭 -->
     <div class="tab-nav">
       <button class="tab-btn active" onclick="switchTab('list')">사건 목록</button>
       <button class="tab-btn" onclick="switchTab('form')">새 사건 등록</button>
       <button class="tab-btn" onclick="switchTab('detail')" id="tab-detail-btn" style="display:none">사건 상세</button>
     </div>
 
-    <!-- 목록 탭 -->
+    <!-- 목록 -->
     <div id="tab-list">
       <div class="list-header">
         <h2>전체 사건</h2>
@@ -173,21 +164,14 @@
       <table class="case-table">
         <thead>
           <tr>
-            <th>발송일</th>
-            <th>신청인</th>
-            <th>청구 유형</th>
-            <th>중재부</th>
-            <th>담당 기자</th>
-            <th>상태</th>
+            <th>발송일</th><th>신청인</th><th>청구 유형</th><th>중재부</th><th>담당 기자</th><th>상태</th>
           </tr>
         </thead>
-        <tbody id="case-tbody">
-          <tr><td colspan="6" class="empty-state">불러오는 중...</td></tr>
-        </tbody>
+        <tbody id="case-tbody"><tr><td colspan="6" class="empty-state">불러오는 중...</td></tr></tbody>
       </table>
     </div>
 
-    <!-- 등록 탭 -->
+    <!-- 등록 폼 -->
     <div id="tab-form-content" style="display:none">
       <div class="step-nav">
         <div class="step-item active" id="snav1" onclick="goStep(1)">1. 사건 기본</div>
@@ -215,16 +199,14 @@
           </div>
           <div class="field-grid col2" style="margin-top:14px">
             <div class="field"><label>신청인 <span class="required">*</span></label><input type="text" id="f-applicant" placeholder="예: 전상인"></div>
-            <div class="field"><label>피신청인 <span class="required">*</span></label><input type="text" id="f-respondent" placeholder="예: KBS미디어" value="KBS미디어"></div>
+            <div class="field"><label>피신청인 <span class="required">*</span></label><input type="text" id="f-respondent" value="KBS미디어"></div>
           </div>
         </div>
-
         <div class="form-panel">
           <h3>사건번호</h3>
           <div id="case-num-rows"></div>
-          <button class="btn" style="font-size:13px;margin-top:4px" onclick="addCaseNumRow()">+ 사건번호 추가</button>
+          <button class="btn btn-sm" style="margin-top:4px" onclick="addCaseNumRow()">+ 사건번호 추가</button>
         </div>
-
         <div class="form-panel">
           <h3>대상 보도</h3>
           <div class="field-grid col2">
@@ -235,28 +217,20 @@
             <div class="field"><label>기사 제목</label><input type="text" id="f-title" placeholder="예: 차량으로 실어 나르고…"></div>
           </div>
         </div>
-
         <div class="form-panel">
           <h3>담당자</h3>
           <div class="field-grid col3">
-            <div class="field"><label>담당 기자</label><input type="text" id="f-reporter" placeholder="이유진"></div>
-            <div class="field"><label>소속 총국</label><input type="text" id="f-reporter-org" placeholder="청주총국 보도국"></div>
-            <div class="field"><label>KBS 법무 담당</label><input type="text" id="f-attorney" placeholder="심혜민 변호사"></div>
+            <div class="field"><label>담당 기자</label><input type="text" id="f-reporter"></div>
+            <div class="field"><label>소속 총국</label><input type="text" id="f-reporter-org"></div>
+            <div class="field"><label>KBS 법무 담당</label><input type="text" id="f-attorney"></div>
           </div>
           <div class="field-grid col2" style="margin-top:14px">
             <div class="field"><label>중재부</label>
               <select id="f-arb-org">
-                <option value="서울중재부">서울중재부</option>
-                <option value="부산중재부">부산중재부</option>
-                <option value="대구중재부">대구중재부</option>
-                <option value="광주중재부">광주중재부</option>
-                <option value="대전중재부">대전중재부</option>
-                <option value="경기중재부">경기중재부</option>
-                <option value="강원중재부">강원중재부</option>
-                <option value="충북중재부">충북중재부</option>
-                <option value="전북중재부">전북중재부</option>
-                <option value="경남중재부">경남중재부</option>
-                <option value="제주중재부">제주중재부</option>
+                <option>서울중재부</option><option>부산중재부</option><option>대구중재부</option>
+                <option>광주중재부</option><option>대전중재부</option><option>경기중재부</option>
+                <option>강원중재부</option><option>충북중재부</option><option>전북중재부</option>
+                <option>경남중재부</option><option>제주중재부</option>
               </select>
             </div>
             <div class="field"><label>조정기일</label><input type="datetime-local" id="f-scheduled"></div>
@@ -269,16 +243,13 @@
         <div class="form-panel">
           <h3>대응 이력</h3>
           <div class="event-list" id="event-list-ui"></div>
-          <button class="btn" style="font-size:13px" onclick="toggleEventForm()">+ 이력 추가</button>
+          <button class="btn btn-sm" onclick="togglePanel('event-form-panel')">+ 이력 추가</button>
         </div>
         <div class="form-panel" id="event-form-panel" style="display:none">
           <h3>이력 입력</h3>
           <div class="field-grid col2">
             <div class="field"><label>유형 <span class="required">*</span></label>
-              <select id="ev-type">
-                <option>대응통지</option><option>답변서제출</option>
-                <option>조정기일</option><option>종결통지</option><option>후속조치</option><option>소송전환</option>
-              </select>
+              <select id="ev-type"><option>대응통지</option><option>답변서제출</option><option>조정기일</option><option>종결통지</option><option>후속조치</option><option>소송전환</option></select>
             </div>
             <div class="field"><label>일자 <span class="required">*</span></label><input type="date" id="ev-date"></div>
           </div>
@@ -292,8 +263,8 @@
             <div class="field"><label>메모</label><textarea id="ev-desc" placeholder="내용을 입력하세요"></textarea></div>
           </div>
           <div style="display:flex;gap:8px;justify-content:flex-end;margin-top:12px">
-            <button class="btn" onclick="toggleEventForm()">취소</button>
-            <button class="btn btn-primary" onclick="addEventItem()">추가</button>
+            <button class="btn btn-sm" onclick="togglePanel('event-form-panel')">취소</button>
+            <button class="btn btn-sm btn-primary" onclick="addEventItem()">추가</button>
           </div>
         </div>
       </div>
@@ -303,26 +274,10 @@
         <div class="form-panel">
           <h3>결과 유형</h3>
           <div class="outcome-grid">
-            <div class="outcome-card" onclick="selectOutcome('조정성립',this)">
-              <div style="font-size:20px">✅</div>
-              <div class="oc-title">조정 성립</div>
-              <div class="oc-desc">합의서 작성, 이행 조건 있음</div>
-            </div>
-            <div class="outcome-card" onclick="selectOutcome('조정불성립',this)">
-              <div style="font-size:20px">❌</div>
-              <div class="oc-title">조정 불성립</div>
-              <div class="oc-desc">당사자 간 합의 불가</div>
-            </div>
-            <div class="outcome-card" onclick="selectOutcome('취하',this)">
-              <div style="font-size:20px">↩️</div>
-              <div class="oc-title">신청 취하</div>
-              <div class="oc-desc">신청인이 조정 전 취하</div>
-            </div>
-            <div class="outcome-card" onclick="selectOutcome('진행중',this)">
-              <div style="font-size:20px">🕐</div>
-              <div class="oc-title">진행 중</div>
-              <div class="oc-desc">아직 결과 미확정</div>
-            </div>
+            <div class="outcome-card" onclick="selectOutcome('조정성립',this)"><div style="font-size:20px">✅</div><div class="oc-title">조정 성립</div><div class="oc-desc">합의서 작성, 이행 조건 있음</div></div>
+            <div class="outcome-card" onclick="selectOutcome('조정불성립',this)"><div style="font-size:20px">❌</div><div class="oc-title">조정 불성립</div><div class="oc-desc">당사자 간 합의 불가</div></div>
+            <div class="outcome-card" onclick="selectOutcome('취하',this)"><div style="font-size:20px">↩️</div><div class="oc-title">신청 취하</div><div class="oc-desc">신청인이 조정 전 취하</div></div>
+            <div class="outcome-card" onclick="selectOutcome('진행중',this)"><div style="font-size:20px">🕐</div><div class="oc-title">진행 중</div><div class="oc-desc">아직 결과 미확정</div></div>
           </div>
         </div>
         <div class="form-panel" id="outcome-detail-panel" style="display:none">
@@ -346,7 +301,7 @@
         </div>
       </div>
 
-      <!-- Step 4 - 파일 첨부 -->
+      <!-- Step 4 -->
       <div class="step-content" id="sc4">
         <div class="form-panel">
           <h3>PDF 파일 첨부</h3>
@@ -370,7 +325,7 @@
           <table class="confirm-table" id="confirm-table"></table>
         </div>
         <div class="form-panel" style="background:#fafaf8">
-          <p style="font-size:13px;color:#888">저장 버튼을 누르면 Supabase DB에 저장되고 PDF 파일이 업로드됩니다.</p>
+          <p style="font-size:13px;color:#888">저장 버튼을 누르면 DB에 저장되고 파일이 업로드됩니다.</p>
         </div>
       </div>
 
@@ -381,11 +336,11 @@
       </div>
     </div>
 
-    <!-- 상세 탭 -->
+    <!-- 상세 보기 -->
     <div id="tab-detail" style="display:none">
-      <div style="margin-bottom:16px;display:flex;gap:10px;align-items:center">
+      <div style="margin-bottom:16px;display:flex;gap:10px;align-items:center;flex-wrap:wrap">
         <button class="btn" onclick="switchTab('list')">← 목록으로</button>
-        <button class="btn btn-danger" onclick="deleteCase()">삭제</button>
+        <button class="btn btn-danger btn-sm" onclick="deleteCase()">삭제</button>
       </div>
       <div id="detail-content"></div>
     </div>
@@ -395,18 +350,15 @@
 <div id="toast"></div>
 
 <script>
-// ── Supabase 설정 ──────────────────────────────────────
 const SUPABASE_URL = 'https://krahjjtoyrycmsegbopa.supabase.co';
 const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImtyYWhqanRveXJ5Y21zZWdib3BhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODI0MTA5NjMsImV4cCI6MjA5Nzk4Njk2M30.RAOggBmwmNwAijqZGOLX499OP051Up7_djin6ELAW3s';
 const APP_PASSWORD = 'kbs2026!';
-
 const { createClient } = supabase;
 const db = createClient(SUPABASE_URL, SUPABASE_KEY);
 
-// ── 로그인 ────────────────────────────────────────────
+// ── 로그인 ──
 function doLogin() {
-  const pw = document.getElementById('pw-input').value;
-  if (pw === APP_PASSWORD) {
+  if (document.getElementById('pw-input').value === APP_PASSWORD) {
     document.getElementById('login-screen').style.display = 'none';
     document.getElementById('app').style.display = 'block';
     loadCases();
@@ -420,26 +372,24 @@ function logout() {
   document.getElementById('pw-input').value = '';
 }
 
-// ── 탭 전환 ───────────────────────────────────────────
+// ── 탭 전환 ──
 function switchTab(name) {
   ['tab-list','tab-form-content','tab-detail'].forEach(id => {
     const el = document.getElementById(id);
     if (el) el.style.display = 'none';
   });
   document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-  const targetId = name === 'form' ? 'tab-form-content' : name === 'detail' ? 'tab-detail' : 'tab-list';
-  const el = document.getElementById(targetId);
+  const map = { list:'tab-list', form:'tab-form-content', detail:'tab-detail' };
+  const el = document.getElementById(map[name]);
   if (el) el.style.display = 'block';
-  const idx = name === 'list' ? 0 : name === 'form' ? 1 : 2;
+  const idx = {list:0, form:1, detail:2}[name];
   const btns = document.querySelectorAll('.tab-btn');
   if (btns[idx]) btns[idx].classList.add('active');
+  window.scrollTo(0, 0);
 }
-function showNewForm() {
-  resetForm();
-  switchTab('form');
-}
+function showNewForm() { resetForm(); switchTab('form'); }
 
-// ── 사건 목록 ─────────────────────────────────────────
+// ── 목록 ──
 let cases = [];
 async function loadCases() {
   const { data, error } = await db.from('cases').select('*').order('broadcast_date', { ascending: false });
@@ -447,28 +397,28 @@ async function loadCases() {
   cases = data || [];
   renderCaseList();
 }
-
 function renderCaseList() {
   const tbody = document.getElementById('case-tbody');
-  document.getElementById('case-count').textContent = `총 ${cases.length}건`;
+  document.getElementById('case-count').textContent = '총 ' + cases.length + '건';
   if (cases.length === 0) {
     tbody.innerHTML = '<tr><td colspan="6" class="empty-state">등록된 사건이 없습니다.</td></tr>';
     return;
   }
   tbody.innerHTML = cases.map(c => `
     <tr onclick="showDetail(${c.id})">
-      <td>${c.broadcast_date || '-'}</td>
+      <td>${c.broadcast_date||'-'}</td>
       <td style="font-weight:500">${c.applicant_name}</td>
       <td>${c.claim_type}</td>
-      <td>${c.arbitration_org || '-'}</td>
-      <td>${c.assigned_reporter || '-'}</td>
+      <td>${c.arbitration_org||'-'}</td>
+      <td>${c.assigned_reporter||'-'}</td>
       <td><span class="badge badge-${c.status}">${c.status}</span></td>
-    </tr>
-  `).join('');
+    </tr>`).join('');
 }
 
-// ── 상세 보기 ─────────────────────────────────────────
+// ── 상세 보기 ──
 let currentCaseId = null;
+let detailOutcomeType = '진행중';
+
 async function showDetail(id) {
   currentCaseId = id;
   const c = cases.find(x => x.id === id);
@@ -480,249 +430,361 @@ async function showDetail(id) {
     db.from('case_outcomes').select('*').eq('case_id', id),
     db.from('case_documents').select('*').eq('case_id', id)
   ]);
+  const out = outcomes && outcomes[0];
+  detailOutcomeType = out ? out.outcome_type : '진행중';
 
-  const out = outcomes?.[0];
+  // ─ 사건 기본 ─
   let html = `
     <div class="detail-section">
-      <h3>사건 기본</h3>
+      <div class="detail-section-header"><h3>사건 기본</h3></div>
       <div class="detail-row"><span class="detail-label">발송일</span>${c.broadcast_date||'-'}</div>
       <div class="detail-row"><span class="detail-label">신청인</span><strong>${c.applicant_name}</strong></div>
       <div class="detail-row"><span class="detail-label">피신청인</span>${c.respondent_name}</div>
       <div class="detail-row"><span class="detail-label">청구 유형</span>${c.claim_type}</div>
       <div class="detail-row"><span class="detail-label">상태</span><span class="badge badge-${c.status}">${c.status}</span></div>
-      <div class="detail-row"><span class="detail-label">사건번호</span>${(nums||[]).map(n=>n.court+n.case_number+' ('+n.respondent_target+')').join(', ')||'-'}</div>
+      <div class="detail-row"><span class="detail-label">사건번호</span>${(nums||[]).map(n=>n.court+n.case_number+' ('+n.respondent_target+')').join('<br>')||'-'}</div>
       <div class="detail-row"><span class="detail-label">대상 보도</span>${c.target_program||'-'}</div>
       <div class="detail-row"><span class="detail-label">기사 제목</span>${c.content_title||'-'}</div>
     </div>
     <div class="detail-section">
-      <h3>담당자</h3>
-      <div class="detail-row"><span class="detail-label">담당 기자</span>${c.assigned_reporter||'-'} ${c.reporter_org?'('+c.reporter_org+')':''}</div>
+      <div class="detail-section-header"><h3>담당자</h3></div>
+      <div class="detail-row"><span class="detail-label">담당 기자</span>${c.assigned_reporter||'-'}${c.reporter_org?' ('+c.reporter_org+')':''}</div>
       <div class="detail-row"><span class="detail-label">KBS 법무 담당</span>${c.kbs_attorney||'-'}</div>
       <div class="detail-row"><span class="detail-label">중재부</span>${c.arbitration_org||'-'}</div>
       <div class="detail-row"><span class="detail-label">조정기일</span>${c.scheduled_date||'-'}</div>
     </div>`;
 
+  // ─ 대응 이력 (+ 추가 버튼) ─
+  html += `<div class="detail-section">
+    <div class="detail-section-header">
+      <h3>대응 이력</h3>
+      <button class="btn btn-sm btn-success" onclick="togglePanel('d-event-panel')">+ 이력 추가</button>
+    </div>
+    <div class="event-list" id="d-event-list">`;
   if (events && events.length > 0) {
-    html += `<div class="detail-section"><h3>대응 이력</h3><div class="event-list">` +
-      events.map(e => `
-        <div class="event-item">
-          <div class="event-dot dot-${e.event_type}"></div>
-          <div class="event-label">${e.event_type} ${e.document_ref?'· '+e.document_ref:''}</div>
-          <div class="event-date">${e.event_date} · <span class="badge badge-${e.status==='완료'?'조정성립':'진행중'}" style="font-size:11px">${e.status}</span></div>
-        </div>`).join('') + `</div></div>`;
+    html += events.map(e => `
+      <div class="event-item">
+        <div class="event-dot dot-${e.event_type}"></div>
+        <div class="event-label">${e.event_type}${e.document_ref?' · '+e.document_ref:''}</div>
+        <div class="event-date">${e.event_date} · <span class="badge badge-${e.status==='완료'?'조정성립':'진행중'}" style="font-size:11px">${e.status}</span></div>
+      </div>`).join('');
+  } else {
+    html += '<p style="font-size:13px;color:#aaa">등록된 이력이 없습니다.</p>';
   }
+  html += `</div>
+    <div class="add-panel" id="d-event-panel" style="display:none">
+      <h4>이력 추가</h4>
+      <div class="field-grid col2">
+        <div class="field"><label>유형 *</label>
+          <select id="d-ev-type"><option>대응통지</option><option>답변서제출</option><option>조정기일</option><option>종결통지</option><option>후속조치</option><option>소송전환</option></select>
+        </div>
+        <div class="field"><label>일자 *</label><input type="date" id="d-ev-date"></div>
+      </div>
+      <div class="field-grid col2" style="margin-top:10px">
+        <div class="field"><label>문서번호</label><input type="text" id="d-ev-docref" placeholder="예: 법무실-531"></div>
+        <div class="field"><label>상태</label>
+          <select id="d-ev-status"><option>완료</option><option>예정</option><option>진행중</option></select>
+        </div>
+      </div>
+      <div class="field-grid" style="margin-top:10px">
+        <div class="field"><label>메모</label><textarea id="d-ev-desc" rows="2" placeholder="내용을 입력하세요"></textarea></div>
+      </div>
+      <div style="display:flex;gap:8px;justify-content:flex-end;margin-top:10px">
+        <button class="btn btn-sm" onclick="togglePanel('d-event-panel')">취소</button>
+        <button class="btn btn-sm btn-primary" onclick="saveDetailEvent(${id})">저장</button>
+      </div>
+    </div>
+  </div>`;
 
+  // ─ 종결 결과 (+ 입력/수정 버튼) ─
+  html += `<div class="detail-section">
+    <div class="detail-section-header">
+      <h3>종결 결과</h3>
+      <button class="btn btn-sm btn-success" onclick="togglePanel('d-outcome-panel')">${out?'✏️ 수정':'+ 결과 입력'}</button>
+    </div>`;
   if (out) {
-    html += `<div class="detail-section"><h3>종결 결과</h3>
+    html += `
       <div class="detail-row"><span class="detail-label">결과 유형</span><span class="badge badge-${out.outcome_type}">${out.outcome_type}</span></div>
       <div class="detail-row"><span class="detail-label">결과 확정일</span>${out.outcome_date||'-'}</div>
       <div class="detail-row"><span class="detail-label">이행 기한</span>${out.deadline_date||'-'}</div>
       <div class="detail-row"><span class="detail-label">합의 내용</span>${out.agreement_content||'-'}</div>
       <div class="detail-row"><span class="detail-label">위약금(원/일)</span>${out.penalty_per_day?out.penalty_per_day.toLocaleString()+'원':'-'}</div>
-      <div class="detail-row"><span class="detail-label">후속조치</span>${out.follow_up_status||'-'}</div>
-    </div>`;
+      <div class="detail-row"><span class="detail-label">후속조치</span>${out.follow_up_status||'-'}</div>`;
+  } else {
+    html += '<p style="font-size:13px;color:#aaa;padding:4px 0">종결 결과가 없습니다.</p>';
   }
+  html += `
+    <div class="add-panel" id="d-outcome-panel" style="display:none">
+      <h4>종결 결과 ${out?'수정':'입력'}</h4>
+      <div class="outcome-grid" style="margin-bottom:12px">
+        <div class="outcome-card${detailOutcomeType==='조정성립'?' selected':''}" onclick="setDetailOutcome('조정성립',this)"><div style="font-size:18px">✅</div><div class="oc-title">조정 성립</div></div>
+        <div class="outcome-card${detailOutcomeType==='조정불성립'?' selected':''}" onclick="setDetailOutcome('조정불성립',this)"><div style="font-size:18px">❌</div><div class="oc-title">조정 불성립</div></div>
+        <div class="outcome-card${detailOutcomeType==='취하'?' selected':''}" onclick="setDetailOutcome('취하',this)"><div style="font-size:18px">↩️</div><div class="oc-title">신청 취하</div></div>
+        <div class="outcome-card${detailOutcomeType==='진행중'?' selected':''}" onclick="setDetailOutcome('진행중',this)"><div style="font-size:18px">🕐</div><div class="oc-title">진행 중</div></div>
+      </div>
+      <div class="field-grid col2">
+        <div class="field"><label>결과 확정일</label><input type="date" id="d-oc-date" value="${out&&out.outcome_date?out.outcome_date:''}"></div>
+        <div class="field"><label>이행 기한</label><input type="date" id="d-oc-deadline" value="${out&&out.deadline_date?out.deadline_date:''}"></div>
+      </div>
+      <div class="field-grid" style="margin-top:10px">
+        <div class="field"><label>합의 내용</label><textarea id="d-oc-content" rows="3">${out&&out.agreement_content?out.agreement_content:''}</textarea></div>
+      </div>
+      <div class="field-grid col2" style="margin-top:10px">
+        <div class="field"><label>위약금(원/일)</label><input type="number" id="d-oc-penalty" value="${out&&out.penalty_per_day?out.penalty_per_day:''}"></div>
+        <div class="field"><label>후속조치</label>
+          <select id="d-oc-followup">
+            <option${!out||out.follow_up_status==='해당없음'?' selected':''}>해당없음</option>
+            <option${out&&out.follow_up_status==='미완료'?' selected':''}>미완료</option>
+            <option${out&&out.follow_up_status==='완료확인'?' selected':''}>완료확인</option>
+          </select>
+        </div>
+      </div>
+      <div style="display:flex;gap:8px;justify-content:flex-end;margin-top:10px">
+        <button class="btn btn-sm" onclick="togglePanel('d-outcome-panel')">취소</button>
+        <button class="btn btn-sm btn-primary" onclick="saveDetailOutcome(${id},${out?out.id:'null'})">저장</button>
+      </div>
+    </div>
+  </div>`;
 
+  // ─ 첨부 파일 (+ 파일 추가) ─
+  html += `<div class="detail-section">
+    <div class="detail-section-header">
+      <h3>첨부 파일</h3>
+      <button class="btn btn-sm btn-success" onclick="document.getElementById('d-file-input').click()">+ 파일 추가</button>
+    </div>
+    <input type="file" id="d-file-input" multiple accept=".pdf,.docx" style="display:none" onchange="uploadDetailFiles(${id},this.files)">
+    <div class="file-list" id="d-file-list">`;
   if (docs && docs.length > 0) {
-    html += `<div class="detail-section"><h3>첨부 파일</h3>` +
-      docs.map(d => {
-        const { data: urlData } = db.storage.from('case-documents').getPublicUrl(d.file_path);
-        return `<div class="file-item">📄 <span>${d.file_name}</span>
-          <a href="${urlData.publicUrl}" target="_blank" class="btn" style="font-size:12px;padding:4px 10px">열기</a></div>`;
-      }).join('') + `</div>`;
+    html += docs.map(d => {
+      const { data: urlData } = db.storage.from('case-documents').getPublicUrl(d.file_path);
+      const url = urlData ? urlData.publicUrl : '#';
+      return `<div class="file-item">
+        📄 <span title="${d.file_name}">${d.file_name}</span>
+        <span class="file-size">${d.file_size?Math.round(d.file_size/1024)+'KB':''}</span>
+        <a href="${url}" target="_blank" rel="noopener" class="btn btn-sm">열기</a>
+        <button class="btn btn-sm btn-danger" onclick="deleteFile(${d.id},'${d.file_path}')">삭제</button>
+      </div>`;
+    }).join('');
+  } else {
+    html += '<p style="font-size:13px;color:#aaa">첨부된 파일이 없습니다.</p>';
   }
+  html += '</div></div>';
 
   document.getElementById('detail-content').innerHTML = html;
-  document.getElementById('tab-detail').style.display = 'block';
-  document.getElementById('tab-detail-btn') && null;
+  document.getElementById('tab-detail-btn').style.display = '';
   switchTab('detail');
 }
 
+// ── 상세 이력 저장 ──
+async function saveDetailEvent(caseId) {
+  const date = document.getElementById('d-ev-date').value;
+  if (!date) { showToast('일자를 입력해 주세요.'); return; }
+  const { error } = await db.from('case_events').insert({
+    case_id: caseId,
+    event_type: document.getElementById('d-ev-type').value,
+    event_date: date,
+    document_ref: document.getElementById('d-ev-docref').value,
+    status: document.getElementById('d-ev-status').value,
+    description: document.getElementById('d-ev-desc').value
+  });
+  if (error) { showToast('저장 실패: ' + error.message); return; }
+  showToast('✅ 이력이 저장되었습니다.');
+  await loadCases();
+  showDetail(caseId);
+}
+
+// ── 상세 결과 저장 ──
+function setDetailOutcome(type, el) {
+  document.querySelectorAll('#d-outcome-panel .outcome-card').forEach(c => c.classList.remove('selected'));
+  el.classList.add('selected');
+  detailOutcomeType = type;
+}
+async function saveDetailOutcome(caseId, existingId) {
+  const payload = {
+    case_id: caseId,
+    outcome_type: detailOutcomeType,
+    outcome_date: document.getElementById('d-oc-date').value || null,
+    deadline_date: document.getElementById('d-oc-deadline').value || null,
+    agreement_content: document.getElementById('d-oc-content').value,
+    penalty_per_day: parseInt(document.getElementById('d-oc-penalty').value) || null,
+    follow_up_status: document.getElementById('d-oc-followup').value
+  };
+  let error;
+  if (existingId && existingId !== 'null') {
+    ({ error } = await db.from('case_outcomes').update(payload).eq('id', existingId));
+  } else {
+    ({ error } = await db.from('case_outcomes').insert(payload));
+  }
+  if (error) { showToast('저장 실패: ' + error.message); return; }
+  await db.from('cases').update({ status: detailOutcomeType }).eq('id', caseId);
+  showToast('✅ 결과가 저장되었습니다.');
+  await loadCases();
+  showDetail(caseId);
+}
+
+// ── 파일 업로드 (상세) ──
+async function uploadDetailFiles(caseId, files) {
+  if (!files || files.length === 0) return;
+  showToast('업로드 중...');
+  for (const file of Array.from(files)) {
+    const path = caseId + '/' + Date.now() + '_' + file.name;
+    const { error: upErr } = await db.storage.from('case-documents').upload(path, file);
+    if (upErr) { showToast('업로드 실패: ' + upErr.message); continue; }
+    await db.from('case_documents').insert({ case_id: caseId, file_name: file.name, file_path: path, file_size: file.size });
+  }
+  showToast('✅ 파일 업로드 완료');
+  showDetail(caseId);
+}
+
+// ── 파일 삭제 ──
+async function deleteFile(docId, filePath) {
+  if (!confirm('이 파일을 삭제하시겠습니까?')) return;
+  await db.storage.from('case-documents').remove([filePath]);
+  await db.from('case_documents').delete().eq('id', docId);
+  showToast('파일이 삭제되었습니다.');
+  showDetail(currentCaseId);
+}
+
+// ── 사건 삭제 ──
 async function deleteCase() {
   if (!confirm('이 사건을 삭제하시겠습니까?')) return;
-  const { error } = await db.from('cases').delete().eq('id', currentCaseId);
-  if (error) { showToast('삭제 실패: ' + error.message); return; }
+  await db.from('cases').delete().eq('id', currentCaseId);
   showToast('삭제되었습니다.');
+  document.getElementById('tab-detail-btn').style.display = 'none';
   await loadCases();
   switchTab('list');
 }
 
-// ── 폼 상태 ───────────────────────────────────────────
-let curStep = 1;
-let caseNums = [];
-let eventItems = [];
-let selectedOutcome = '진행중';
-let selectedFiles = [];
-
-function resetForm() {
-  curStep = 1;
-  caseNums = [{ court: '2026서울조정', num: '', target: 'KBS미디어' }];
-  eventItems = [];
-  selectedOutcome = '진행중';
-  selectedFiles = [];
-  document.querySelectorAll('.step-item').forEach((el,i) => {
-    el.classList.remove('active','done');
-    if (i===0) el.classList.add('active');
-  });
-  document.querySelectorAll('.step-content').forEach((el,i) => {
-    el.classList.remove('active');
-    if (i===0) el.classList.add('active');
-  });
-  document.getElementById('btn-prev').style.visibility = 'hidden';
-  document.getElementById('btn-next').textContent = '다음 →';
-  document.getElementById('btn-next').className = 'btn btn-primary';
-  document.getElementById('step-ind').textContent = '1 / 5';
-  renderCaseNums();
-  renderEventList();
-  renderFileList();
-  document.querySelectorAll('.outcome-card').forEach(c => c.classList.remove('selected'));
-  document.getElementById('outcome-detail-panel').style.display = 'none';
-  ['f-broadcast-date','f-application-date','f-applicant','f-program','f-title',
-   'f-reporter','f-reporter-org','f-attorney','f-scheduled','f-content-date'].forEach(id => {
-    const el = document.getElementById(id);
-    if (el) el.value = '';
-  });
-  document.getElementById('f-respondent').value = 'KBS미디어';
+// ── 패널 토글 ──
+function togglePanel(id) {
+  const el = document.getElementById(id);
+  if (el) el.style.display = el.style.display === 'none' ? 'block' : 'none';
 }
 
-// ── 스텝 네비 ─────────────────────────────────────────
+// ── 폼 상태 ──
+let curStep = 1, caseNums = [], eventItems = [], selectedOutcome = '진행중', selectedFiles = [];
+
+function resetForm() {
+  curStep = 1; caseNums = []; eventItems = []; selectedOutcome = '진행중'; selectedFiles = [];
+  document.querySelectorAll('.step-item').forEach((el,i) => { el.classList.remove('active','done'); if(i===0) el.classList.add('active'); });
+  document.querySelectorAll('.step-content').forEach((el,i) => { el.classList.remove('active'); if(i===0) el.classList.add('active'); });
+  document.getElementById('btn-prev').style.visibility = 'hidden';
+  document.getElementById('btn-next').textContent = '다음 →';
+  document.getElementById('step-ind').textContent = '1 / 5';
+  ['f-broadcast-date','f-application-date','f-applicant','f-program','f-title','f-reporter','f-reporter-org','f-attorney','f-scheduled','f-content-date'].forEach(id => { const el = document.getElementById(id); if(el) el.value=''; });
+  document.getElementById('f-respondent').value = 'KBS미디어';
+  document.querySelectorAll('#sc3 .outcome-card').forEach(c => c.classList.remove('selected'));
+  document.getElementById('outcome-detail-panel').style.display = 'none';
+  caseNums = [{ court:'2026서울조정', num:'', target:'KBS미디어' }];
+  renderCaseNums(); renderEventList(); renderFileList();
+  const efp = document.getElementById('event-form-panel');
+  if (efp) efp.style.display = 'none';
+}
+
 function goStep(n) {
   document.getElementById('sc'+curStep).classList.remove('active');
   document.getElementById('snav'+curStep).classList.remove('active');
   document.getElementById('snav'+curStep).classList.add('done');
   curStep = n;
   document.getElementById('sc'+curStep).classList.add('active');
-  document.querySelectorAll('.step-item').forEach((el,i) => {
-    if (i+1 === n) { el.classList.add('active'); el.classList.remove('done'); }
-  });
+  document.getElementById('snav'+curStep).classList.remove('done');
+  document.getElementById('snav'+curStep).classList.add('active');
   document.getElementById('step-ind').textContent = curStep + ' / 5';
   document.getElementById('btn-prev').style.visibility = curStep === 1 ? 'hidden' : 'visible';
-  const btnNext = document.getElementById('btn-next');
-  if (curStep === 5) {
-    renderConfirm();
-    btnNext.textContent = '💾 저장';
-    btnNext.className = 'btn btn-primary';
-  } else {
-    btnNext.textContent = '다음 →';
-    btnNext.className = 'btn btn-primary';
-  }
+  document.getElementById('btn-next').textContent = curStep === 5 ? '💾 저장' : '다음 →';
+  if (curStep === 5) renderConfirm();
 }
 function nextStep() { if (curStep < 5) goStep(curStep+1); else saveAll(); }
 function prevStep() { if (curStep > 1) goStep(curStep-1); }
 
-// ── 사건번호 ──────────────────────────────────────────
-function addCaseNumRow() {
-  caseNums.push({ court: '2026서울조정', num: '', target: 'KBS미디어' });
-  renderCaseNums();
-}
+// ── 사건번호 ──
+function addCaseNumRow() { caseNums.push({court:'2026서울조정',num:'',target:'KBS미디어'}); renderCaseNums(); }
 function removeCaseNum(i) { caseNums.splice(i,1); renderCaseNums(); }
+const courtOptions = ['2026서울조정','2026부산조정','2026대구조정','2026광주조정','2026대전조정','2026경기조정','2026강원조정','2026충북조정','2026전북조정','2026경남조정','2026제주조정','2025서울조정','2025부산조정','2025대구조정','2025광주조정','2025대전조정','2025경기조정','2025강원조정','2025충북조정','2025전북조정','2025경남조정','2025제주조정'];
 function renderCaseNums() {
   document.getElementById('case-num-rows').innerHTML = caseNums.map((cn,i) => `
     <div class="case-num-row">
       <select onchange="caseNums[${i}].court=this.value" style="flex:1.5">
-        ${['2026서울조정','2026부산조정','2026대구조정','2026광주조정','2026대전조정','2026경기조정','2026강원조정','2026충북조정','2026전북조정','2026경남조정','2026제주조정','2025서울조정','2025부산조정','2025대구조정','2025광주조정','2025대전조정','2025경기조정','2025강원조정','2025충북조정','2025전북조정','2025경남조정','2025제주조정'].map(v=>`<option${cn.court===v?' selected':''}>${v}</option>`).join('')}
+        ${courtOptions.map(v=>`<option${cn.court===v?' selected':''}>${v}</option>`).join('')}
       </select>
       <input type="text" placeholder="번호" value="${cn.num}" oninput="caseNums[${i}].num=this.value" style="flex:0.8">
       <select onchange="caseNums[${i}].target=this.value" style="flex:1.2">
         ${['KBS미디어','한국방송공사'].map(v=>`<option${cn.target===v?' selected':''}>${v}</option>`).join('')}
       </select>
-      <button class="icon-btn" onclick="removeCaseNum(${i})" aria-label="삭제">✕</button>
+      <button class="icon-btn" onclick="removeCaseNum(${i})">✕</button>
     </div>`).join('');
 }
 
-// ── 이벤트 이력 ───────────────────────────────────────
-function toggleEventForm() {
-  const p = document.getElementById('event-form-panel');
-  p.style.display = p.style.display === 'none' ? 'block' : 'none';
-}
+// ── 이벤트 이력 ──
 function addEventItem() {
-  const type = document.getElementById('ev-type').value;
   const date = document.getElementById('ev-date').value;
   if (!date) { showToast('일자를 입력해 주세요.'); return; }
-  eventItems.push({
-    event_type: type, event_date: date,
-    document_ref: document.getElementById('ev-docref').value,
-    status: document.getElementById('ev-status').value,
-    description: document.getElementById('ev-desc').value
-  });
+  eventItems.push({ event_type: document.getElementById('ev-type').value, event_date: date, document_ref: document.getElementById('ev-docref').value, status: document.getElementById('ev-status').value, description: document.getElementById('ev-desc').value });
   renderEventList();
-  toggleEventForm();
+  togglePanel('event-form-panel');
+  ['ev-date','ev-docref','ev-desc'].forEach(id => document.getElementById(id).value = '');
 }
 function removeEvent(i) { eventItems.splice(i,1); renderEventList(); }
 function renderEventList() {
   const el = document.getElementById('event-list-ui');
-  if (eventItems.length === 0) { el.innerHTML = '<p style="font-size:13px;color:#aaa">아직 추가된 이력이 없습니다.</p>'; return; }
-  el.innerHTML = eventItems.map((e,i) => `
-    <div class="event-item">
-      <div class="event-dot dot-${e.event_type}"></div>
-      <div class="event-label">${e.event_type} ${e.document_ref?'· '+e.document_ref:''}</div>
-      <div class="event-date">${e.event_date}</div>
-      <button class="icon-btn" onclick="removeEvent(${i})" style="font-size:12px">✕</button>
-    </div>`).join('');
+  if (!el) return;
+  el.innerHTML = eventItems.length === 0
+    ? '<p style="font-size:13px;color:#aaa">아직 추가된 이력이 없습니다.</p>'
+    : eventItems.map((e,i) => `
+      <div class="event-item">
+        <div class="event-dot dot-${e.event_type}"></div>
+        <div class="event-label">${e.event_type}${e.document_ref?' · '+e.document_ref:''}</div>
+        <div class="event-date">${e.event_date}</div>
+        <button class="icon-btn" onclick="removeEvent(${i})" style="font-size:12px">✕</button>
+      </div>`).join('');
 }
 
-// ── 종결 결과 ─────────────────────────────────────────
+// ── 종결 결과 ──
 function selectOutcome(type, el) {
-  document.querySelectorAll('.outcome-card').forEach(c => c.classList.remove('selected'));
-  el.classList.add('selected');
-  selectedOutcome = type;
-  const showDetail = (type === '조정성립' || type === '조정불성립');
-  document.getElementById('outcome-detail-panel').style.display = showDetail ? 'block' : 'none';
+  document.querySelectorAll('#sc3 .outcome-card').forEach(c => c.classList.remove('selected'));
+  el.classList.add('selected'); selectedOutcome = type;
+  document.getElementById('outcome-detail-panel').style.display = (type==='조정성립'||type==='조정불성립') ? 'block' : 'none';
 }
 
-// ── 파일 업로드 ───────────────────────────────────────
-function handleFileSelect(files) {
-  Array.from(files).forEach(f => {
-    if (!selectedFiles.find(x => x.name === f.name)) selectedFiles.push(f);
-  });
-  renderFileList();
-}
-function handleFileDrop(e) {
-  e.preventDefault();
-  document.getElementById('file-drop-zone').classList.remove('dragover');
-  handleFileSelect(e.dataTransfer.files);
-}
+// ── 파일 ──
+function handleFileSelect(files) { Array.from(files).forEach(f => { if(!selectedFiles.find(x=>x.name===f.name)) selectedFiles.push(f); }); renderFileList(); }
+function handleFileDrop(e) { e.preventDefault(); document.getElementById('file-drop-zone').classList.remove('dragover'); handleFileSelect(e.dataTransfer.files); }
 function removeFile(i) { selectedFiles.splice(i,1); renderFileList(); }
 function renderFileList() {
   const el = document.getElementById('file-list-ui');
-  if (selectedFiles.length === 0) { el.innerHTML = ''; return; }
+  if (!el) return;
   el.innerHTML = selectedFiles.map((f,i) => `
-    <div class="file-item">
-      📄 <span>${f.name}</span>
-      <span class="file-size">${(f.size/1024).toFixed(0)} KB</span>
+    <div class="file-item">📄 <span>${f.name}</span>
+      <span class="file-size">${Math.round(f.size/1024)} KB</span>
       <button class="icon-btn" onclick="removeFile(${i})" style="font-size:12px">✕</button>
     </div>`).join('');
 }
 
-// ── 확인 화면 ─────────────────────────────────────────
+// ── 확인 ──
 function renderConfirm() {
   const rows = [
-    ['신청인', document.getElementById('f-applicant').value || '-'],
-    ['피신청인', document.getElementById('f-respondent').value || '-'],
-    ['발송일', document.getElementById('f-broadcast-date').value || '-'],
+    ['신청인', document.getElementById('f-applicant').value||'-'],
+    ['피신청인', document.getElementById('f-respondent').value||'-'],
+    ['발송일', document.getElementById('f-broadcast-date').value||'-'],
     ['청구 유형', document.getElementById('f-claim-type').value],
     ['사건번호', caseNums.filter(n=>n.num).map(n=>n.court+n.num+' ('+n.target+')').join(', ')||'-'],
     ['중재부', document.getElementById('f-arb-org').value],
     ['담당 기자', document.getElementById('f-reporter').value||'-'],
-    ['대응 이력', eventItems.length + '건'],
+    ['대응 이력', eventItems.length+'건'],
     ['결과 상태', selectedOutcome],
-    ['첨부 파일', selectedFiles.length + '개'],
+    ['첨부 파일', selectedFiles.length+'개'],
   ];
-  document.getElementById('confirm-table').innerHTML = rows.map(([k,v]) =>
-    `<tr><td>${k}</td><td style="font-weight:500">${v}</td></tr>`).join('');
+  document.getElementById('confirm-table').innerHTML = rows.map(([k,v])=>`<tr><td>${k}</td><td style="font-weight:500">${v}</td></tr>`).join('');
 }
 
-// ── 저장 ─────────────────────────────────────────────
+// ── 저장 후 새 등록 화면으로 이동 ──
 async function saveAll() {
   const applicant = document.getElementById('f-applicant').value.trim();
   const broadcastDate = document.getElementById('f-broadcast-date').value;
   if (!applicant || !broadcastDate) { showToast('신청인과 발송일은 필수입니다.'); return; }
-
-  document.getElementById('btn-next').innerHTML = '<span class="spinner"></span> 저장 중...';
-  document.getElementById('btn-next').disabled = true;
-
+  const btn = document.getElementById('btn-next');
+  btn.innerHTML = '<span class="spinner"></span> 저장 중...'; btn.disabled = true;
   try {
-    // 1. cases 저장
     const { data: caseData, error: caseErr } = await db.from('cases').insert({
       broadcast_date: broadcastDate,
       application_date: document.getElementById('f-application-date').value || null,
@@ -740,27 +802,13 @@ async function saveAll() {
       status: selectedOutcome
     }).select().single();
     if (caseErr) throw caseErr;
-
     const cid = caseData.id;
-
-    // 2. 사건번호 저장
-    const validNums = caseNums.filter(n => n.num.trim());
-    if (validNums.length > 0) {
-      await db.from('case_numbers').insert(validNums.map(n => ({
-        case_id: cid, court: n.court, case_number: n.num, respondent_target: n.target
-      })));
-    }
-
-    // 3. 이벤트 저장
-    if (eventItems.length > 0) {
-      await db.from('case_events').insert(eventItems.map(e => ({ ...e, case_id: cid })));
-    }
-
-    // 4. 종결 결과 저장
+    const validNums = caseNums.filter(n=>n.num.trim());
+    if (validNums.length > 0) await db.from('case_numbers').insert(validNums.map(n=>({case_id:cid,court:n.court,case_number:n.num,respondent_target:n.target})));
+    if (eventItems.length > 0) await db.from('case_events').insert(eventItems.map(e=>({...e,case_id:cid})));
     if (selectedOutcome !== '진행중') {
       await db.from('case_outcomes').insert({
-        case_id: cid,
-        outcome_type: selectedOutcome,
+        case_id: cid, outcome_type: selectedOutcome,
         outcome_date: document.getElementById('oc-date').value || null,
         deadline_date: document.getElementById('oc-deadline').value || null,
         agreement_content: document.getElementById('oc-content').value,
@@ -769,44 +817,30 @@ async function saveAll() {
         document_ref: document.getElementById('oc-docref').value
       });
     }
-
-    // 5. 파일 업로드
     for (const file of selectedFiles) {
-      const path = `${cid}/${Date.now()}_${file.name}`;
+      const path = cid + '/' + Date.now() + '_' + file.name;
       const { error: upErr } = await db.storage.from('case-documents').upload(path, file);
-      if (!upErr) {
-        await db.from('case_documents').insert({
-          case_id: cid, file_name: file.name,
-          file_path: path, file_size: file.size
-        });
-      }
+      if (!upErr) await db.from('case_documents').insert({case_id:cid,file_name:file.name,file_path:path,file_size:file.size});
     }
-
-    showToast('✅ 저장되었습니다!');
     await loadCases();
-    setTimeout(() => switchTab('list'), 800);
-
+    showToast('✅ 저장되었습니다! 새 사건을 등록하세요.');
+    // ★ 저장 후 새 등록 빈 화면으로 이동
+    resetForm();
+    switchTab('form');
   } catch (err) {
     showToast('저장 실패: ' + err.message);
   } finally {
-    document.getElementById('btn-next').innerHTML = '💾 저장';
-    document.getElementById('btn-next').disabled = false;
+    btn.innerHTML = '💾 저장'; btn.disabled = false;
   }
 }
 
-// ── 토스트 ────────────────────────────────────────────
 function showToast(msg) {
   const t = document.getElementById('toast');
-  t.textContent = msg;
-  t.style.display = 'block';
-  setTimeout(() => t.style.display = 'none', 2800);
+  t.textContent = msg; t.style.display = 'block';
+  setTimeout(() => t.style.display = 'none', 3000);
 }
 
-// 초기화
-window.onload = () => {
-  resetForm();
-  addCaseNumRow();
-};
+window.onload = () => { resetForm(); };
 </script>
 </body>
 </html>
