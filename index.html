@@ -617,7 +617,7 @@ async function showDetail(id) {
   if (docs && docs.length > 0) {
     // 서명된 URL 생성 (1시간 유효)
     const fileHtmlArr = await Promise.all(docs.map(async d => {
-      const { data: signedData } = await db.storage.from('case_documents').createSignedUrl(d.file_path, 3600);
+      const { data: signedData } = await db.storage.from('case-documents').createSignedUrl(d.file_path, 3600);
       const url = signedData ? signedData.signedUrl : '#';
       return `<div class="file-item">
         📄 <span title="${d.file_name}">${d.file_name}</span>
@@ -719,14 +719,23 @@ async function saveDetailOutcome(caseId, existingId) {
   showDetail(caseId);
 }
 
+// ── 파일명 안전 변환 (한글·특수문자 → 언더스코어) ──
+function safeName(originalName) {
+  const dotIdx = originalName.lastIndexOf('.');
+  const ext  = dotIdx !== -1 ? originalName.slice(dotIdx) : '';
+  const base = dotIdx !== -1 ? originalName.slice(0, dotIdx) : originalName;
+  const clean = base.replace(/[^a-zA-Z0-9_-]/g, '_');
+  return (clean || 'file') + ext;
+}
+
 // ── 파일 업로드 (상세) ──
 async function uploadDetailFiles(caseId, files) {
   if (!files || files.length === 0) return;
   showToast('업로드 중...');
   let successCount = 0;
   for (const file of Array.from(files)) {
-    const path = caseId + '/' + Date.now() + '_' + file.name;
-    const { error: upErr } = await db.storage.from('case_documents').upload(path, file);
+    const path = caseId + '/' + Date.now() + '_' + safeName(file.name);
+    const { error: upErr } = await db.storage.from('case-documents').upload(path, file);
     if (upErr) { showToast('업로드 실패: ' + upErr.message); continue; }
     const { error: dbErr } = await db.from('case_documents').insert({ case_id: caseId, file_name: file.name, file_path: path, file_size: file.size });
     if (!dbErr) successCount++;
@@ -746,7 +755,7 @@ async function uploadDetailFiles(caseId, files) {
 // ── 파일 삭제 ──
 async function deleteFile(docId, filePath) {
   if (!confirm('이 파일을 삭제하시겠습니까?')) return;
-  await db.storage.from('case_documents').remove([filePath]);
+  await db.storage.from('case-documents').remove([filePath]);
   await db.from('case_documents').delete().eq('id', docId);
   showToast('파일이 삭제되었습니다.');
   showDetail(currentCaseId);
@@ -925,8 +934,8 @@ async function saveAll() {
       });
     }
     for (const file of selectedFiles) {
-      const path = cid + '/' + Date.now() + '_' + file.name;
-      const { error: upErr } = await db.storage.from('case_documents').upload(path, file);
+      const path = cid + '/' + Date.now() + '_' + safeName(file.name);
+      const { error: upErr } = await db.storage.from('case-documents').upload(path, file);
       if (!upErr) await db.from('case_documents').insert({case_id:cid,file_name:file.name,file_path:path,file_size:file.size});
     }
     await loadCases();
